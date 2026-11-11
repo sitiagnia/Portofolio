@@ -1,22 +1,20 @@
 /* =========================================================
    PORTOFOLIO — script.js
    Fitur:
-   - Tema terang / gelap (tersimpan di browser)
-   - Menu navigasi mobile + penanda menu aktif saat scroll
-   - Inisial otomatis dari nama
-   - Efek mengetik untuk peran/profesi
+   - Inisial otomatis dari nama (tampil saat belum ada foto)
    - Animasi muncul saat scroll
-   - Form unggah foto profil: pilih / seret-lepas, validasi,
-     pratinjau, potong persegi, simpan, batal, dan hapus
+   - Foto profil: dari file asset/foto.jpg (jika ada),
+     atau hasil unggahan lewat pop-up form (disimpan di browser)
+   - Form foto: pilih / seret-lepas, validasi, pratinjau,
+     simpan, batal, hapus
    ========================================================= */
 'use strict';
 
 /* ---------- Pengaturan ---------- */
 const KUNCI_FOTO = 'portofolio_foto';
-const KUNCI_TEMA = 'portofolio_tema';
 const MAKS_UKURAN = 2 * 1024 * 1024;                 // 2 MB
 const TIPE_DIIZINKAN = ['image/jpeg', 'image/png', 'image/webp'];
-const UKURAN_SIMPAN = 600;                           // sisi foto yang disimpan (px)
+const SISI_MAKS = 1000;                              // sisi terpanjang foto yang disimpan (px)
 
 /* ---------- Penyimpanan aman (localStorage bisa diblokir) ---------- */
 const penyimpanan = {
@@ -44,85 +42,7 @@ function tampilkanToast(pesan, tipe = 'success') {
   timerToast = setTimeout(() => toast.classList.remove('show'), 3000);
 }
 
-/* ---------- Tema terang / gelap ---------- */
-function initTema() {
-  const root = document.documentElement;
-  const tombol = document.getElementById('themeToggle');
-  const mediaGelap = window.matchMedia('(prefers-color-scheme: dark)');
-  if (!tombol) return;
-
-  const temaAktif = () => root.getAttribute('data-theme') || (mediaGelap.matches ? 'dark' : 'light');
-
-  const perbaruiLabel = () => {
-    const label = temaAktif() === 'dark' ? 'Ganti ke tema terang' : 'Ganti ke tema gelap';
-    tombol.setAttribute('aria-label', label);
-    tombol.setAttribute('title', label);
-  };
-
-  tombol.addEventListener('click', () => {
-    const temaBaru = temaAktif() === 'dark' ? 'light' : 'dark';
-    root.setAttribute('data-theme', temaBaru);
-    penyimpanan.tulis(KUNCI_TEMA, temaBaru);
-    perbaruiLabel();
-  });
-
-  if (mediaGelap.addEventListener) mediaGelap.addEventListener('change', perbaruiLabel);
-  perbaruiLabel();
-}
-
-/* ---------- Navigasi ---------- */
-function initNavigasi() {
-  const navbar = document.getElementById('navbar');
-  const menu = document.getElementById('navMenu');
-  const hamburger = document.getElementById('hamburger');
-  if (!navbar || !menu || !hamburger) return;
-
-  const tautan = Array.from(menu.querySelectorAll('.nav-link'));
-
-  const tutupMenu = () => {
-    menu.classList.remove('open');
-    hamburger.classList.remove('active');
-    hamburger.setAttribute('aria-expanded', 'false');
-    hamburger.setAttribute('aria-label', 'Buka menu');
-  };
-
-  hamburger.addEventListener('click', () => {
-    const terbuka = menu.classList.toggle('open');
-    hamburger.classList.toggle('active', terbuka);
-    hamburger.setAttribute('aria-expanded', String(terbuka));
-    hamburger.setAttribute('aria-label', terbuka ? 'Tutup menu' : 'Buka menu');
-  });
-
-  tautan.forEach((link) => link.addEventListener('click', tutupMenu));
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') tutupMenu(); });
-  document.addEventListener('click', (e) => { if (!navbar.contains(e.target)) tutupMenu(); });
-
-  // Bayangan navbar saat halaman di-scroll
-  const cekScroll = () => navbar.classList.toggle('scrolled', window.scrollY > 10);
-  window.addEventListener('scroll', cekScroll, { passive: true });
-  cekScroll();
-
-  // Tandai menu sesuai section yang sedang terlihat
-  if (!('IntersectionObserver' in window)) return;
-  const tandaiAktif = (id) => {
-    tautan.forEach((link) => {
-      const cocok = link.getAttribute('href') === `#${id}`;
-      link.classList.toggle('active', cocok);
-      if (cocok) link.setAttribute('aria-current', 'page');
-      else link.removeAttribute('aria-current');
-    });
-  };
-  const pengamat = new IntersectionObserver((entri) => {
-    entri.forEach((e) => { if (e.isIntersecting) tandaiAktif(e.target.id); });
-  }, { rootMargin: '-45% 0px -50% 0px' });
-
-  tautan
-    .map((link) => document.querySelector(link.getAttribute('href')))
-    .filter(Boolean)
-    .forEach((section) => pengamat.observe(section));
-}
-
-/* ---------- Inisial nama (dipakai saat belum ada foto) ---------- */
+/* ---------- Inisial nama ---------- */
 function ambilInisial(nama) {
   const huruf = nama.trim().split(/\s+/).filter(Boolean).slice(0, 2).map((kata) => kata[0].toUpperCase());
   return huruf.join('') || '?';
@@ -133,44 +53,6 @@ function initInisial() {
   if (!elNama) return;
   const inisial = ambilInisial(elNama.textContent);
   document.querySelectorAll('[data-inisial]').forEach((el) => { el.textContent = inisial; });
-}
-
-/* ---------- Efek mengetik ---------- */
-function initEfekKetik() {
-  const el = document.getElementById('typing');
-  if (!el) return;
-
-  let daftarPeran;
-  try { daftarPeran = JSON.parse(el.dataset.roles); } catch (e) { daftarPeran = []; }
-  if (!Array.isArray(daftarPeran) || daftarPeran.length === 0) return;
-
-  if (kurangiGerak || daftarPeran.length === 1) {
-    el.textContent = daftarPeran[0];
-    return;
-  }
-
-  let indeks = 0;
-  let posisi = daftarPeran[0].length;   // mulai dari kata pertama yang sudah tampil
-  let menghapus = true;
-
-  const langkah = () => {
-    const kata = daftarPeran[indeks];
-    posisi += menghapus ? -1 : 1;
-    el.textContent = kata.slice(0, posisi);
-
-    let jeda = menghapus ? 45 : 95;
-    if (!menghapus && posisi === kata.length) {
-      menghapus = true;
-      jeda = 1800;
-    } else if (menghapus && posisi === 0) {
-      menghapus = false;
-      indeks = (indeks + 1) % daftarPeran.length;
-      jeda = 350;
-    }
-    setTimeout(langkah, jeda);
-  };
-
-  setTimeout(langkah, 2000);
 }
 
 /* ---------- Animasi muncul saat scroll ---------- */
@@ -187,7 +69,7 @@ function initReveal() {
         obs.unobserve(e.target);
       }
     });
-  }, { threshold: 0.12 });
+  }, { threshold: 0.1 });
   elemen.forEach((el) => pengamat.observe(el));
 }
 
@@ -198,35 +80,28 @@ function formatUkuran(byte) {
   return `${(byte / (1024 * 1024)).toFixed(2)} MB`;
 }
 
-/**
- * Membaca file gambar, memotongnya menjadi persegi, mengecilkan
- * ukurannya, lalu mengembalikan data URL JPEG (hemat penyimpanan).
- */
-function olahGambar(file, sisiMaks = UKURAN_SIMPAN) {
+/** Mengecilkan foto (sisi terpanjang maks. SISI_MAKS) lalu mengembalikan data URL JPEG. */
+function olahGambar(file) {
   return new Promise((resolve, reject) => {
     const url = URL.createObjectURL(file);
     const img = new Image();
 
     img.onload = () => {
-      const lebar = img.naturalWidth;
-      const tinggi = img.naturalHeight;
-      const sisi = Math.min(lebar, tinggi);
-      const sx = (lebar - sisi) / 2;
-      // Foto potret: geser potongan sedikit ke atas agar wajah tidak terpotong
-      const sy = tinggi > lebar ? (tinggi - sisi) * 0.25 : (tinggi - sisi) / 2;
-      const target = Math.min(sisi, sisiMaks);
+      const skala = Math.min(1, SISI_MAKS / Math.max(img.naturalWidth, img.naturalHeight));
+      const lebar = Math.round(img.naturalWidth * skala);
+      const tinggi = Math.round(img.naturalHeight * skala);
 
       const canvas = document.createElement('canvas');
-      canvas.width = target;
-      canvas.height = target;
+      canvas.width = lebar;
+      canvas.height = tinggi;
       const ctx = canvas.getContext('2d');
-      ctx.fillStyle = '#ffffff';                 // latar putih untuk PNG transparan
-      ctx.fillRect(0, 0, target, target);
+      ctx.fillStyle = '#ffffff';               // latar putih untuk PNG transparan
+      ctx.fillRect(0, 0, lebar, tinggi);
       ctx.imageSmoothingQuality = 'high';
-      ctx.drawImage(img, sx, sy, sisi, sisi, 0, 0, target, target);
+      ctx.drawImage(img, 0, 0, lebar, tinggi);
 
       URL.revokeObjectURL(url);
-      resolve(canvas.toDataURL('image/jpeg', 0.88));
+      resolve(canvas.toDataURL('image/jpeg', 0.86));
     };
 
     img.onerror = () => {
@@ -238,8 +113,19 @@ function olahGambar(file, sisiMaks = UKURAN_SIMPAN) {
   });
 }
 
-/** Menampilkan foto (atau inisial jika src kosong) di dalam elemen avatar. */
-function aturAvatar(wadah, src) {
+/** Mengecek apakah file foto bawaan (mis. asset/foto.jpg) ada. */
+function cekFotoBawaan(src) {
+  return new Promise((resolve) => {
+    if (!src) { resolve(null); return; }
+    const img = new Image();
+    img.onload = () => resolve(src);
+    img.onerror = () => resolve(null);
+    img.src = src;
+  });
+}
+
+/** Menampilkan foto (atau inisial jika src kosong) di dalam bingkai. */
+function aturFoto(wadah, src) {
   if (!wadah) return;
   const inisial = wadah.querySelector('.avatar-initials');
   let img = wadah.querySelector('img');
@@ -258,14 +144,12 @@ function aturAvatar(wadah, src) {
   }
 }
 
-function tampilkanFotoDiHalaman(src) {
-  document.querySelectorAll('[data-avatar]').forEach((wadah) => aturAvatar(wadah, src));
-}
-
-/* ---------- Form foto profil ---------- */
-function initFormFoto() {
+/* ---------- Foto profil & pop-up form ---------- */
+async function initFoto() {
+  const bingkaiUtama = document.querySelector('[data-avatar]');
+  const dialog = document.getElementById('dialogFoto');
   const form = document.getElementById('formFoto');
-  if (!form) return;
+  if (!bingkaiUtama || !dialog || !form) return;
 
   const input = document.getElementById('inputFoto');
   const dropzone = document.getElementById('dropzone');
@@ -278,10 +162,14 @@ function initFormFoto() {
   const btnSimpan = document.getElementById('btnSimpan');
   const btnBatal = document.getElementById('btnBatal');
   const btnHapus = document.getElementById('btnHapus');
+  const btnTutup = document.getElementById('btnTutup');
   const btnEditFoto = document.getElementById('btnEditFoto');
 
-  let fotoTersimpan = penyimpanan.ambil(KUNCI_FOTO);
-  let fotoBaru = null;
+  let fotoUnggahan = penyimpanan.ambil(KUNCI_FOTO);   // foto dari form (localStorage)
+  let fotoBawaan = null;                              // foto dari file asset/foto.jpg
+  let fotoBaru = null;                                // foto yang dipilih tapi belum disimpan
+
+  const fotoAktif = () => fotoUnggahan || fotoBawaan;
 
   const tulisPesan = (teks, tipe = '') => {
     pesan.textContent = teks;
@@ -291,16 +179,20 @@ function initFormFoto() {
   const perbaruiTombol = () => {
     btnSimpan.disabled = !fotoBaru;
     btnBatal.hidden = !fotoBaru;
-    btnHapus.hidden = !fotoTersimpan || Boolean(fotoBaru);
+    btnHapus.hidden = !fotoUnggahan || Boolean(fotoBaru);
   };
 
-  const kembalikanTampilan = () => {
+  const tampilkanFotoAktif = () => aturFoto(bingkaiUtama, fotoAktif());
+
+  const kembalikanForm = () => {
     fotoBaru = null;
     form.reset();
     infoFile.hidden = true;
     dropzone.classList.remove('has-file');
-    aturAvatar(pratinjau, fotoTersimpan);
-    keterangan.textContent = fotoTersimpan ? 'Foto profil saat ini' : 'Belum ada foto profil';
+    aturFoto(pratinjau, fotoAktif());
+    if (fotoUnggahan) keterangan.textContent = 'Foto unggahan kamu';
+    else if (fotoBawaan) keterangan.textContent = 'Foto dari folder asset';
+    else keterangan.textContent = 'Belum ada foto profil';
     perbaruiTombol();
   };
 
@@ -318,7 +210,7 @@ function initFormFoto() {
       return;
     }
 
-    tulisPesan('Memproses foto…', 'info');
+    tulisPesan('Memproses foto…');
     try {
       fotoBaru = await olahGambar(file);
     } catch (err) {
@@ -329,20 +221,37 @@ function initFormFoto() {
       return;
     }
 
-    aturAvatar(pratinjau, fotoBaru);
+    aturFoto(pratinjau, fotoBaru);
     keterangan.textContent = 'Pratinjau foto baru';
     namaFile.textContent = file.name;
     ukuranFile.textContent = formatUkuran(file.size);
     infoFile.hidden = false;
     dropzone.classList.add('has-file');
-    tulisPesan('Foto siap. Klik "Simpan Foto" untuk memakainya.', 'info');
+    tulisPesan('Foto siap. Klik "Simpan Foto" untuk memakainya.');
     perbaruiTombol();
   };
 
-  // Pilih lewat dialog file
+  /* Buka & tutup pop-up */
+  const bukaDialog = () => {
+    kembalikanForm();
+    tulisPesan('');
+    if (typeof dialog.showModal === 'function') dialog.showModal();
+    else dialog.setAttribute('open', '');
+  };
+  const tutupDialog = () => {
+    if (typeof dialog.close === 'function') dialog.close();
+    else dialog.removeAttribute('open');
+  };
+
+  btnEditFoto.addEventListener('click', bukaDialog);
+  btnTutup.addEventListener('click', tutupDialog);
+  // Klik area gelap di luar kotak = tutup
+  dialog.addEventListener('click', (e) => { if (e.target === dialog) tutupDialog(); });
+
+  /* Pilih lewat dialog file */
   input.addEventListener('change', () => prosesFile(input.files[0]));
 
-  // Seret & lepas
+  /* Seret & lepas */
   ['dragenter', 'dragover'].forEach((jenis) => {
     dropzone.addEventListener(jenis, (e) => {
       e.preventDefault();
@@ -362,7 +271,7 @@ function initFormFoto() {
   // Cegah browser membuka file jika dilepas di luar area unggah
   ['dragover', 'drop'].forEach((jenis) => window.addEventListener(jenis, (e) => e.preventDefault()));
 
-  // Simpan
+  /* Simpan */
   form.addEventListener('submit', (e) => {
     e.preventDefault();
     if (!fotoBaru) {
@@ -371,57 +280,50 @@ function initFormFoto() {
     }
 
     const berhasil = penyimpanan.tulis(KUNCI_FOTO, fotoBaru);
-    fotoTersimpan = fotoBaru;
-    tampilkanFotoDiHalaman(fotoTersimpan);
-    kembalikanTampilan();
+    fotoUnggahan = fotoBaru;
+    tampilkanFotoAktif();
+    kembalikanForm();
 
     if (berhasil) {
-      tulisPesan('Foto profil berhasil disimpan.', 'success');
+      tutupDialog();
       tampilkanToast('Foto profil diperbarui ✓');
     } else {
       tulisPesan('Foto tampil, tetapi tidak bisa disimpan permanen di browser ini.', 'error');
-      tampilkanToast('Penyimpanan browser tidak tersedia', 'error');
     }
   });
 
-  // Batal
+  /* Batal */
   btnBatal.addEventListener('click', () => {
-    kembalikanTampilan();
+    kembalikanForm();
     tulisPesan('Pemilihan foto dibatalkan.');
   });
 
-  // Hapus
+  /* Hapus */
   btnHapus.addEventListener('click', () => {
-    if (!window.confirm('Hapus foto profil? Tampilan akan kembali ke inisial nama.')) return;
+    if (!window.confirm('Hapus foto profil yang diunggah?')) return;
     penyimpanan.hapus(KUNCI_FOTO);
-    fotoTersimpan = null;
-    tampilkanFotoDiHalaman(null);
-    kembalikanTampilan();
-    tulisPesan('Foto profil dihapus.', 'success');
+    fotoUnggahan = null;
+    tampilkanFotoAktif();
+    kembalikanForm();
+    tulisPesan('Foto unggahan dihapus.', 'success');
     tampilkanToast('Foto profil dihapus');
   });
 
-  // Tombol kamera di foto hero: lompat ke form & buka pemilih file
-  if (btnEditFoto) {
-    btnEditFoto.addEventListener('click', () => {
-      document.getElementById('foto').scrollIntoView({ behavior: kurangiGerak ? 'auto' : 'smooth' });
-      input.click();
-    });
+  /* Tampilan awal */
+  tampilkanFotoAktif();
+  kembalikanForm();
+  fotoBawaan = await cekFotoBawaan(bingkaiUtama.dataset.default);
+  if (!fotoUnggahan && fotoBawaan) {
+    tampilkanFotoAktif();
+    kembalikanForm();
   }
-
-  // Tampilan awal
-  tampilkanFotoDiHalaman(fotoTersimpan);
-  kembalikanTampilan();
 }
 
 /* ---------- Jalankan semua ---------- */
 document.addEventListener('DOMContentLoaded', () => {
-  initTema();
-  initNavigasi();
   initInisial();
-  initEfekKetik();
   initReveal();
-  initFormFoto();
+  initFoto();
 
   const tahun = document.getElementById('tahun');
   if (tahun) tahun.textContent = new Date().getFullYear();
