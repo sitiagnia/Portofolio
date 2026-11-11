@@ -2,11 +2,17 @@
    PORTOFOLIO — style.css
    Gaya "lembar profil": latar abu terang, judul tebal besar,
    foto bersudut membulat, ubin keahlian gelap.
+
+   Ukuran layar:
+   - Desktop : > 1100px  (3 kolom)
+   - Tablet  : 701–1100px (2 kolom)
+   - Mobile  : ≤ 700px   (1 kolom)
    ========================================================= */
 
 /* ---------- 1. Variabel ---------- */
 :root {
   --bg: #efefef;
+  --bg-nav: rgba(239, 239, 239, 0.85);
   --surface: #ffffff;
   --ink: #2d3038;          /* warna teks utama & ubin */
   --ink-soft: #474b55;     /* teks paragraf */
@@ -17,11 +23,29 @@
 
   --success: #2e7d32;
   --danger: #c0392b;
+  --shadow: 0 20px 40px -24px rgba(0, 0, 0, 0.35);
 
+  --nav-h: 68px;
   --radius-photo: clamp(28px, 3vw, 44px);
   --font: 'Outfit', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 
   color-scheme: light;
+}
+
+/* Tema gelap (dipilih lewat tombol bulan/matahari) */
+:root[data-theme="dark"] {
+  --bg: #16171b;
+  --bg-nav: rgba(22, 23, 27, 0.85);
+  --surface: #202127;
+  --ink: #ececee;
+  --ink-soft: #b9bcc5;
+  --muted: #8a8e98;
+  --line: #2f3139;
+  --on-ink: #16171b;
+  --success: #66bb6a;
+  --danger: #ef6f62;
+  --shadow: 0 20px 40px -24px rgba(0, 0, 0, 0.8);
+  color-scheme: dark;
 }
 
 /* ---------- 2. Dasar ---------- */
@@ -38,12 +62,14 @@ body {
   color: var(--ink);
   background: var(--bg);
   overflow-x: clip;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 img { display: block; max-width: 100%; }
 a { color: inherit; text-decoration: none; }
 ul { list-style: none; }
 button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; }
+input, textarea { font: inherit; color: inherit; }
 [hidden] { display: none !important; }
 
 :focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
@@ -59,6 +85,20 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   border: 0;
 }
 
+.skip-link {
+  position: fixed;
+  top: 12px; left: 12px;
+  z-index: 200;
+  padding: 10px 16px;
+  border-radius: 10px;
+  background: var(--ink);
+  color: var(--on-ink);
+  font-weight: 600;
+  transform: translateY(-200%);
+  transition: transform 0.2s ease;
+}
+.skip-link:focus { transform: none; }
+
 .ic {
   width: 20px; height: 20px;
   flex-shrink: 0;
@@ -70,15 +110,98 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
 }
 
 .page,
-.footer { width: min(1320px, 100% - 32px); margin-inline: auto; }
+.footer,
+.nav-inner { width: min(1320px, 100% - 32px); margin-inline: auto; }
 
-/* ---------- 3. Lembar profil ---------- */
+/* Jarak saat lompat ke bagian lewat menu (agar tidak tertutup navbar) */
+section[id],
+.block[id],
+#kontak { scroll-margin-top: calc(var(--nav-h) + 16px); }
+
+/* ---------- 3. Navbar & progres ---------- */
+.progress {
+  position: fixed;
+  top: 0; left: 0;
+  z-index: 60;
+  height: 3px;
+  width: 100%;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+.nav {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 50;
+  height: var(--nav-h);
+  border-bottom: 1px solid transparent;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+.nav.scrolled {
+  background: var(--bg-nav);
+  -webkit-backdrop-filter: saturate(150%) blur(12px);
+  backdrop-filter: saturate(150%) blur(12px);
+  border-bottom-color: var(--line);
+}
+.nav-inner {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.nav-logo { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.02em; }
+.nav-logo i { font-style: normal; color: var(--accent); }
+
+.nav-menu { display: flex; gap: 4px; }
+.nav-link {
+  position: relative;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-weight: 500;
+  color: var(--ink-soft);
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+.nav-link:hover { color: var(--ink); }
+.nav-link.active { color: var(--on-ink); background: var(--ink); }
+
+.nav-actions { display: flex; align-items: center; gap: 8px; }
+.icon-btn {
+  display: grid;
+  place-items: center;
+  width: 42px; height: 42px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+.icon-btn:hover { border-color: var(--ink); }
+.icon-btn:active { transform: scale(0.94); }
+
+.theme-toggle .ic-sun { display: none; }
+:root[data-theme="dark"] .theme-toggle .ic-sun { display: block; }
+:root[data-theme="dark"] .theme-toggle .ic-moon { display: none; }
+
+.hamburger { display: none; flex-direction: column; justify-content: center; align-items: center; gap: 4px; }
+.hamburger span {
+  display: block;
+  width: 18px; height: 2px;
+  border-radius: 2px;
+  background: currentColor;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+.hamburger.active span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+.hamburger.active span:nth-child(2) { opacity: 0; }
+.hamburger.active span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+/* ---------- 4. Lembar profil ---------- */
 .about {
   min-height: 100vh;
   min-height: 100svh;
   display: flex;
   align-items: center;
-  padding: clamp(32px, 6vw, 96px) 0;
+  padding: calc(var(--nav-h) + clamp(16px, 3vw, 40px)) 0 clamp(40px, 6vw, 88px);
 }
 
 .about-grid {
@@ -95,7 +218,7 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
 }
 
 /* Foto */
-.photo { grid-area: photo; position: relative; align-self: stretch; }
+.photo { grid-area: photo; position: relative; align-self: stretch; perspective: 1000px; }
 
 .photo-frame,
 .preview-frame {
@@ -104,13 +227,17 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   place-items: center;
   overflow: hidden;
   background: linear-gradient(160deg, #464b57, #262930);
-  color: var(--on-ink);
+  color: #f3f3f3;
 }
 .photo-frame {
   height: 100%;
   min-height: 540px;
   border-radius: var(--radius-photo);
+  box-shadow: var(--shadow);
+  transition: transform 0.5s ease;
+  will-change: transform;
 }
+.photo-frame.tilting { transition: transform 0.08s linear; }
 .photo-frame img,
 .preview-frame img {
   position: absolute;
@@ -137,10 +264,10 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   gap: 8px;
   padding: 10px 16px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.92);
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
-  color: var(--ink);
+  color: #2d3038;
   font-size: 0.92rem;
   font-weight: 600;
   box-shadow: 0 8px 24px -10px rgba(0, 0, 0, 0.35);
@@ -152,9 +279,6 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
 .photo:hover .photo-edit,
 .photo-edit:focus-visible { opacity: 1; transform: none; }
 .photo-edit:hover { background: #fff; }
-@media (hover: none) {
-  .photo-edit { opacity: 1; transform: none; }
-}
 
 /* Hello */
 .hello { grid-area: hello; }
@@ -166,22 +290,33 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   margin-bottom: clamp(20px, 2.5vw, 36px);
 }
 .hello-title {
-  font-size: clamp(3.8rem, 7.4vw, 7rem);
+  font-size: clamp(3.6rem, 7.4vw, 7rem);
   font-weight: 800;
   line-height: 0.95;
   letter-spacing: -0.03em;
 }
+.hello-title.ganti { animation: gantiSapaan 0.45s ease; }
+
+.sticker-btn {
+  flex-shrink: 0;
+  border-radius: 50%;
+  -webkit-tap-highlight-color: transparent;
+}
 .sticker {
+  display: block;
   width: clamp(78px, 8.5vw, 124px);
   height: auto;
-  flex-shrink: 0;
   transform: rotate(-10deg);
   animation: goyang 4s ease-in-out infinite;
   filter: drop-shadow(0 10px 14px rgba(224, 87, 79, 0.25));
+  transition: transform 0.2s ease;
 }
+.sticker-btn:hover .sticker { animation-play-state: paused; transform: rotate(0) scale(1.08); }
+.sticker-btn.putar .sticker { animation: putar 0.6s ease; }
+.pupil { transition: transform 0.15s ease-out; }
+
 .hello-bio {
   font-size: clamp(1.05rem, 1.45vw, 1.32rem);
-  font-weight: 400;
   line-height: 1.6;
   color: var(--ink-soft);
 }
@@ -213,42 +348,111 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   place-items: center;
   aspect-ratio: 1;
   border-radius: 18px;
+  border: 2px solid transparent;
   background: var(--ink);
   color: var(--on-ink);
   font-size: clamp(0.95rem, 1.25vw, 1.2rem);
   font-weight: 600;
   letter-spacing: -0.01em;
-  cursor: default;
-  transition: transform 0.25s ease, background-color 0.25s ease;
+  transition: transform 0.25s ease, background-color 0.25s ease, box-shadow 0.25s ease;
+  -webkit-tap-highlight-color: transparent;
 }
-.skill:hover { transform: translateY(-4px) rotate(-4deg); background: var(--accent); }
+.skill:hover { transform: translateY(-4px) rotate(-4deg); }
+.skill.active {
+  background: var(--accent);
+  color: #fff;
+  box-shadow: 0 12px 24px -12px var(--accent);
+  transform: translateY(-4px);
+}
 
-/* Entri pendidikan / pengalaman */
-.entry + .entry { margin-top: clamp(24px, 3vw, 40px); }
+.skill-detail {
+  margin-top: 18px;
+  max-width: calc(3 * clamp(66px, 5.8vw, 82px) + 2 * clamp(10px, 1vw, 16px) + 80px);
+  padding: 16px 18px;
+  border-radius: 18px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+}
+.skill-detail-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.skill-detail-head strong { font-size: 1.05rem; font-weight: 700; }
+.skill-detail-head span { font-size: 0.95rem; font-weight: 700; color: var(--accent); }
+.skill-bar {
+  height: 8px;
+  margin: 10px 0 10px;
+  border-radius: 999px;
+  background: var(--line);
+  overflow: hidden;
+}
+.skill-bar span {
+  display: block;
+  height: 100%;
+  width: 0;
+  border-radius: inherit;
+  background: var(--accent);
+  transition: width 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.skill-detail p { font-size: 0.92rem; line-height: 1.5; color: var(--ink-soft); }
+
+/* Entri pendidikan / pengalaman (bisa dibuka-tutup) */
+.entry + .entry { margin-top: clamp(18px, 2.4vw, 30px); }
+.entry summary {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  list-style: none;
+  cursor: pointer;
+  border-radius: 12px;
+  -webkit-tap-highlight-color: transparent;
+}
+.entry summary::-webkit-details-marker { display: none; }
+.entry summary > span { display: block; }
 .entry-year {
+  display: block;
   font-size: clamp(1.1rem, 1.4vw, 1.3rem);
   font-weight: 800;
   line-height: 1.35;
 }
 .entry-text {
-  margin-top: 10px;
+  display: block;
+  margin-top: 8px;
   font-size: clamp(1.05rem, 1.4vw, 1.3rem);
   color: var(--ink-soft);
 }
+.entry-chev {
+  margin-top: 4px;
+  width: 30px; height: 30px;
+  padding: 6px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  transition: transform 0.3s ease, background-color 0.2s ease, color 0.2s ease;
+}
+.entry summary:hover .entry-chev { background: var(--ink); color: var(--on-ink); border-color: var(--ink); }
+.entry[open] .entry-chev { transform: rotate(180deg); }
+.entry-detail {
+  margin-top: 12px;
+  padding-left: 16px;
+  border-left: 3px solid var(--accent);
+  color: var(--ink-soft);
+  animation: bukaDetail 0.35s ease;
+}
+.entry-detail li + li { margin-top: 6px; }
 
-/* Kontak */
+/* Kontak cepat */
 .contact {
   grid-area: contact;
   align-self: end;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  gap: 16px 32px;
+  gap: 16px 28px;
 }
+.contact li { display: flex; align-items: center; gap: 6px; min-width: 0; }
 .contact a {
   display: inline-flex;
   align-items: center;
   gap: 10px;
+  min-width: 0;
   font-size: 0.98rem;
   color: var(--ink-soft);
   transition: color 0.2s ease;
@@ -259,30 +463,44 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   display: grid;
   place-items: center;
   flex-shrink: 0;
-  width: 30px;
-  height: 30px;
+  width: 30px; height: 30px;
   border-radius: 50%;
   background: var(--ink);
   color: var(--on-ink);
-  transition: background-color 0.2s ease;
+  transition: background-color 0.2s ease, transform 0.2s ease;
 }
-.contact a:hover .contact-ic { background: var(--accent); }
+.contact a:hover .contact-ic { background: var(--accent); color: #fff; transform: rotate(-10deg); }
 .contact-ic .ic { width: 15px; height: 15px; }
 
-/* ---------- 4. Data diri ---------- */
+.copy-btn {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 30px; height: 30px;
+  border-radius: 8px;
+  color: var(--muted);
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+.copy-btn:hover { color: var(--ink); background: var(--line); }
+.copy-btn .ic { width: 15px; height: 15px; }
+.copy-btn.copied { color: var(--success); }
+
+/* ---------- 5. Data diri ---------- */
 .profile {
   padding: clamp(56px, 8vw, 110px) 0;
   border-top: 1px solid var(--line);
 }
 .profile-list {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   column-gap: clamp(32px, 5vw, 84px);
 }
 .profile-list > div {
   padding: 20px 0;
   border-bottom: 1px solid var(--line);
+  transition: padding-left 0.25s ease;
 }
+.profile-list > div:hover { padding-left: 8px; }
 .profile-list dt {
   font-size: 0.8rem;
   font-weight: 600;
@@ -297,7 +515,62 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   overflow-wrap: anywhere;
 }
 
-/* ---------- 5. Footer ---------- */
+/* ---------- 6. Kirim pesan ---------- */
+.message {
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr;
+  gap: clamp(32px, 5vw, 84px);
+  align-items: start;
+  padding: clamp(56px, 8vw, 110px) 0;
+  border-top: 1px solid var(--line);
+}
+.message-intro p {
+  max-width: 420px;
+  font-size: clamp(1.05rem, 1.4vw, 1.25rem);
+  color: var(--ink-soft);
+}
+
+.message-form {
+  padding: clamp(22px, 3.5vw, 36px);
+  border-radius: 28px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+}
+.field { position: relative; }
+.field + .field { margin-top: 18px; }
+.field label { display: block; margin-bottom: 6px; font-weight: 600; }
+.field input,
+.field textarea {
+  width: 100%;
+  padding: 13px 16px;
+  border-radius: 14px;
+  border: 1.5px solid var(--line);
+  background: var(--bg);
+  font-size: 1rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.field textarea { resize: vertical; min-height: 130px; }
+.field input::placeholder,
+.field textarea::placeholder { color: var(--muted); }
+.field input:focus,
+.field textarea:focus {
+  outline: none;
+  border-color: var(--ink);
+  box-shadow: 0 0 0 4px rgba(224, 87, 79, 0.18);
+}
+.field.invalid input,
+.field.invalid textarea { border-color: var(--danger); }
+.char-count {
+  position: absolute;
+  right: 12px;
+  bottom: 10px;
+  font-size: 0.78rem;
+  color: var(--muted);
+  pointer-events: none;
+}
+
+/* ---------- 7. Footer & tombol ke atas ---------- */
 .footer {
   display: flex;
   flex-wrap: wrap;
@@ -313,7 +586,27 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
 .to-top:hover { color: var(--accent); }
 .to-top .ic { width: 16px; height: 16px; }
 
-/* ---------- 6. Tombol ---------- */
+.float-top {
+  position: fixed;
+  right: clamp(16px, 3vw, 32px);
+  bottom: clamp(16px, 3vw, 32px);
+  z-index: 40;
+  display: grid;
+  place-items: center;
+  width: 50px; height: 50px;
+  border-radius: 50%;
+  background: var(--ink);
+  color: var(--on-ink);
+  box-shadow: var(--shadow);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(16px);
+  transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s, background-color 0.2s ease;
+}
+.float-top.show { opacity: 1; visibility: visible; transform: none; }
+.float-top:hover { background: var(--accent); color: #fff; }
+
+/* ---------- 8. Tombol ---------- */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -329,15 +622,16 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, opacity 0.2s ease;
 }
 .btn .ic { width: 18px; height: 18px; }
+.btn:active:not(:disabled) { transform: scale(0.97); }
 .btn-dark { background: var(--ink); color: var(--on-ink); }
-.btn-dark:hover:not(:disabled) { transform: translateY(-2px); }
+.btn-dark:hover:not(:disabled) { background: var(--accent); color: #fff; }
 .btn-light { background: var(--surface); border-color: var(--line); }
 .btn-light:hover { border-color: var(--ink); }
 .btn-danger { border-color: rgba(192, 57, 43, 0.4); color: var(--danger); }
 .btn-danger:hover { background: rgba(192, 57, 43, 0.08); }
 .btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
-/* ---------- 7. Pop-up foto ---------- */
+/* ---------- 9. Pop-up foto ---------- */
 .modal {
   width: min(760px, 100% - 32px);
   max-height: calc(100% - 32px);
@@ -373,8 +667,7 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
 .modal-close {
   display: grid;
   place-items: center;
-  width: 42px;
-  height: 42px;
+  width: 42px; height: 42px;
   border-radius: 50%;
   background: var(--surface);
   border: 1px solid var(--line);
@@ -389,11 +682,7 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   align-items: start;
 }
 .upload-preview { display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center; }
-.preview-frame {
-  width: 100%;
-  aspect-ratio: 3 / 4;
-  border-radius: 24px;
-}
+.preview-frame { width: 100%; aspect-ratio: 3 / 4; border-radius: 24px; }
 .preview-frame .avatar-initials { font-size: 4rem; }
 .preview-caption { font-size: 0.88rem; font-weight: 500; color: var(--muted); }
 
@@ -404,16 +693,16 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   justify-content: center;
   gap: 10px;
   padding: 30px 20px;
-  border: 2px dashed #bdbdbd;
+  border: 2px dashed var(--line);
   border-radius: 20px;
   background: var(--surface);
   text-align: center;
   cursor: pointer;
-  transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
+  transition: border-color 0.2s ease, transform 0.2s ease;
 }
 .dropzone:hover,
 .dropzone:focus-within,
-.dropzone.dragover { border-color: var(--ink); background: #fafafa; }
+.dropzone.dragover { border-color: var(--ink); }
 .dropzone:focus-within { outline: 3px solid var(--accent); outline-offset: 3px; }
 .dropzone.dragover { transform: scale(1.015); }
 .dropzone.dragover * { pointer-events: none; }
@@ -422,8 +711,7 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
 .dz-icon {
   display: grid;
   place-items: center;
-  width: 54px;
-  height: 54px;
+  width: 54px; height: 54px;
   border-radius: 16px;
   background: var(--ink);
   color: var(--on-ink);
@@ -453,7 +741,7 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
 
 .form-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
 
-/* ---------- 8. Toast ---------- */
+/* ---------- 10. Toast ---------- */
 .toast {
   position: fixed;
   left: 50%;
@@ -474,9 +762,9 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   transition: opacity 0.3s ease, transform 0.3s ease;
 }
 .toast.show { opacity: 1; transform: translate(-50%, 0); }
-.toast.toast-error { background: var(--danger); }
+.toast.toast-error { background: var(--danger); color: #fff; }
 
-/* ---------- 9. Animasi ---------- */
+/* ---------- 11. Animasi ---------- */
 .js .reveal {
   opacity: 0;
   transform: translateY(22px);
@@ -489,6 +777,19 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   0%, 100% { transform: rotate(-10deg); }
   50%      { transform: rotate(6deg) translateY(-4px); }
 }
+@keyframes putar {
+  from { transform: rotate(-10deg) scale(1); }
+  50%  { transform: rotate(180deg) scale(1.15); }
+  to   { transform: rotate(350deg) scale(1); }
+}
+@keyframes gantiSapaan {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes bukaDetail {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: none; }
+}
 @keyframes munculFoto {
   from { opacity: 0; transform: scale(1.05); }
   to   { opacity: 1; transform: none; }
@@ -498,7 +799,9 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   to   { opacity: 1; transform: none; }
 }
 
-/* ---------- 10. Responsif ---------- */
+/* ---------- 12. Responsif ---------- */
+
+/* Tablet (701–1100px): 2 kolom */
 @media (max-width: 1100px) {
   .about-grid {
     grid-template-columns: minmax(260px, 0.9fr) 1.1fr;
@@ -509,9 +812,39 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
       "contact contact";
   }
   .photo-frame { min-height: 480px; }
+  .contact { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .profile-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .message { grid-template-columns: 1fr; }
+  .message-intro p { max-width: 560px; }
 }
 
+/* Tablet kecil & HP: menu jadi tombol hamburger */
+@media (max-width: 760px) {
+  .hamburger { display: flex; }
+  .nav-menu {
+    position: absolute;
+    top: calc(var(--nav-h) - 4px);
+    left: 16px;
+    right: 16px;
+    flex-direction: column;
+    gap: 4px;
+    padding: 10px;
+    border-radius: 22px;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    box-shadow: var(--shadow);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px);
+    transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
+  }
+  .nav-menu.open { opacity: 1; visibility: visible; transform: none; }
+  .nav-link { padding: 12px 16px; border-radius: 14px; }
+}
+
+/* HP (≤ 700px): 1 kolom */
 @media (max-width: 700px) {
+  :root { --nav-h: 62px; }
   .about { min-height: 0; }
   .about-grid {
     grid-template-columns: 1fr;
@@ -519,12 +852,34 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   }
   .photo { width: min(100%, 420px); margin-inline: auto; }
   .photo-frame { min-height: 0; height: auto; aspect-ratio: 4 / 5; }
-  .contact { flex-direction: column; }
+  .skill-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); max-width: 320px; }
+  .skill-detail { max-width: 320px; }
+  .contact { grid-template-columns: 1fr; }
+  .profile-list { grid-template-columns: 1fr; }
 
   .upload-layout { grid-template-columns: 1fr; }
   .preview-frame { width: 160px; }
   .form-actions .btn { flex: 1 1 auto; }
-  .footer { justify-content: center; text-align: center; }
+  .footer { justify-content: center; text-align: center; padding-bottom: 88px; }
+}
+
+/* HP sangat kecil */
+@media (max-width: 380px) {
+  .hello-title { font-size: 3.1rem; }
+  .sticker { width: 68px; }
+}
+
+/* Perangkat sentuh: tombol "Ganti foto" selalu terlihat */
+@media (hover: none) {
+  .photo-edit { opacity: 1; transform: none; }
+  .skill:hover { transform: none; }
+  .skill.active { transform: translateY(-4px); }
+}
+
+/* HP posisi mendatar (landscape) */
+@media (max-height: 520px) and (orientation: landscape) {
+  .about { min-height: 0; }
+  .photo-frame { min-height: 360px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
