@@ -220,8 +220,7 @@ section[id],
 /* Foto */
 .photo { grid-area: photo; position: relative; align-self: stretch; perspective: 1000px; }
 
-.photo-frame,
-.preview-frame {
+.photo-frame {
   position: relative;
   display: grid;
   place-items: center;
@@ -238,8 +237,7 @@ section[id],
   will-change: transform;
 }
 .photo-frame.tilting { transition: transform 0.08s linear; }
-.photo-frame img,
-.preview-frame img {
+.photo-frame img {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -255,30 +253,6 @@ section[id],
   user-select: none;
 }
 
-.photo-edit {
-  position: absolute;
-  left: 18px;
-  bottom: 18px;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 16px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.92);
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
-  color: #2d3038;
-  font-size: 0.92rem;
-  font-weight: 600;
-  box-shadow: 0 8px 24px -10px rgba(0, 0, 0, 0.35);
-  opacity: 0;
-  transform: translateY(6px);
-  transition: opacity 0.25s ease, transform 0.25s ease, background-color 0.2s ease;
-}
-.photo-edit .ic { width: 18px; height: 18px; }
-.photo:hover .photo-edit,
-.photo-edit:focus-visible { opacity: 1; transform: none; }
-.photo-edit:hover { background: #fff; }
 
 /* Hello */
 .hello { grid-area: hello; }
@@ -627,119 +601,7 @@ section[id],
 .btn-dark:hover:not(:disabled) { background: var(--accent); color: #fff; }
 .btn-light { background: var(--surface); border-color: var(--line); }
 .btn-light:hover { border-color: var(--ink); }
-.btn-danger { border-color: rgba(192, 57, 43, 0.4); color: var(--danger); }
-.btn-danger:hover { background: rgba(192, 57, 43, 0.08); }
 .btn:disabled { opacity: 0.4; cursor: not-allowed; }
-
-/* ---------- 9. Pop-up foto ---------- */
-.modal {
-  width: min(760px, 100% - 32px);
-  max-height: calc(100% - 32px);
-  margin: auto;
-  border: none;
-  border-radius: 28px;
-  padding: 0;
-  background: var(--bg);
-  color: var(--ink);
-  box-shadow: 0 40px 80px -30px rgba(0, 0, 0, 0.5);
-}
-.modal[open] { animation: munculModal 0.3s ease; }
-.modal::backdrop {
-  background: rgba(24, 26, 31, 0.55);
-  -webkit-backdrop-filter: blur(4px);
-  backdrop-filter: blur(4px);
-}
-
-.modal-body { padding: clamp(22px, 4vw, 40px); }
-.modal-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  margin-bottom: clamp(20px, 3vw, 32px);
-}
-.modal-head h2 {
-  font-size: clamp(1.6rem, 3vw, 2.2rem);
-  font-weight: 800;
-  line-height: 1;
-  text-transform: uppercase;
-}
-.modal-close {
-  display: grid;
-  place-items: center;
-  width: 42px; height: 42px;
-  border-radius: 50%;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  transition: border-color 0.2s ease;
-}
-.modal-close:hover { border-color: var(--ink); }
-
-.upload-layout {
-  display: grid;
-  grid-template-columns: 200px 1fr;
-  gap: clamp(20px, 4vw, 36px);
-  align-items: start;
-}
-.upload-preview { display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center; }
-.preview-frame { width: 100%; aspect-ratio: 3 / 4; border-radius: 24px; }
-.preview-frame .avatar-initials { font-size: 4rem; }
-.preview-caption { font-size: 0.88rem; font-weight: 500; color: var(--muted); }
-
-.dropzone {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  padding: 30px 20px;
-  border: 2px dashed var(--line);
-  border-radius: 20px;
-  background: var(--surface);
-  text-align: center;
-  cursor: pointer;
-  transition: border-color 0.2s ease, transform 0.2s ease;
-}
-.dropzone:hover,
-.dropzone:focus-within,
-.dropzone.dragover { border-color: var(--ink); }
-.dropzone:focus-within { outline: 3px solid var(--accent); outline-offset: 3px; }
-.dropzone.dragover { transform: scale(1.015); }
-.dropzone.dragover * { pointer-events: none; }
-.dropzone.has-file { border-style: solid; }
-
-.dz-icon {
-  display: grid;
-  place-items: center;
-  width: 54px; height: 54px;
-  border-radius: 16px;
-  background: var(--ink);
-  color: var(--on-ink);
-}
-.dz-icon .ic { width: 24px; height: 24px; }
-.dz-title { line-height: 1.45; color: var(--ink-soft); }
-.dz-title strong { color: var(--ink); font-weight: 700; }
-.dz-hint { font-size: 0.85rem; color: var(--muted); }
-
-.file-info {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-top: 12px;
-  padding: 10px 14px;
-  border-radius: 14px;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  font-size: 0.9rem;
-}
-.file-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; }
-.file-size { flex-shrink: 0; color: var(--muted); }
-
-.form-msg { min-height: 1.5em; margin-top: 12px; font-size: 0.92rem; font-weight: 500; color: var(--ink-soft); }
-.form-msg.is-error { color: var(--danger); }
-.form-msg.is-success { color: var(--success); }
-
-.form-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
 
 /* ---------- 10. Toast ---------- */
 .toast {
@@ -792,10 +654,6 @@ section[id],
 }
 @keyframes munculFoto {
   from { opacity: 0; transform: scale(1.05); }
-  to   { opacity: 1; transform: none; }
-}
-@keyframes munculModal {
-  from { opacity: 0; transform: translateY(16px) scale(0.98); }
   to   { opacity: 1; transform: none; }
 }
 
@@ -857,9 +715,6 @@ section[id],
   .contact { grid-template-columns: 1fr; }
   .profile-list { grid-template-columns: 1fr; }
 
-  .upload-layout { grid-template-columns: 1fr; }
-  .preview-frame { width: 160px; }
-  .form-actions .btn { flex: 1 1 auto; }
   .footer { justify-content: center; text-align: center; padding-bottom: 88px; }
 }
 
@@ -869,9 +724,8 @@ section[id],
   .sticker { width: 68px; }
 }
 
-/* Perangkat sentuh: tombol "Ganti foto" selalu terlihat */
+/* Perangkat sentuh: tanpa efek hover */
 @media (hover: none) {
-  .photo-edit { opacity: 1; transform: none; }
   .skill:hover { transform: none; }
   .skill.active { transform: translateY(-4px); }
 }
