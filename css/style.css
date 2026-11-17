@@ -151,8 +151,6 @@ section[id],
   justify-content: space-between;
   gap: 16px;
 }
-.nav-logo { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.02em; }
-.nav-logo i { font-style: normal; color: var(--accent); }
 
 .nav-menu { display: flex; gap: 4px; }
 .nav-link {
@@ -166,7 +164,7 @@ section[id],
 .nav-link:hover { color: var(--ink); }
 .nav-link.active { color: var(--on-ink); background: var(--ink); }
 
-.nav-actions { display: flex; align-items: center; gap: 8px; }
+.nav-actions { display: flex; align-items: center; gap: 8px; margin-left: auto; }
 .icon-btn {
   display: grid;
   place-items: center;
@@ -179,6 +177,33 @@ section[id],
 .icon-btn:hover { border-color: var(--ink); }
 .icon-btn:active { transform: scale(0.94); }
 
+
+/* Tombol bahasa ID | EN */
+.lang-toggle {
+  display: inline-flex;
+  align-items: center;
+  height: 42px;
+  padding: 4px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  transition: border-color 0.2s ease;
+}
+.lang-toggle:hover { border-color: var(--ink); }
+.lang-toggle span {
+  display: grid;
+  place-items: center;
+  min-width: 34px;
+  height: 32px;
+  padding: 0 8px;
+  border-radius: 999px;
+  color: var(--muted);
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+.lang-toggle span.on { background: var(--ink); color: var(--on-ink); }
 .theme-toggle .ic-sun { display: none; }
 :root[data-theme="dark"] .theme-toggle .ic-sun { display: block; }
 :root[data-theme="dark"] .theme-toggle .ic-moon { display: none; }
@@ -270,6 +295,40 @@ section[id],
   letter-spacing: -0.03em;
 }
 .hello-title.ganti { animation: gantiSapaan 0.45s ease; }
+
+/* Nama panggilan (menonjol) + nama lengkap */
+.name-block { margin-bottom: clamp(18px, 2.2vw, 30px); }
+.nickname {
+  display: inline-block;
+  position: relative;
+  font-size: clamp(2.6rem, 5.2vw, 4.4rem);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+  isolation: isolate;
+}
+/* Efek stabilo di belakang nama panggilan */
+.nickname::after {
+  content: '';
+  position: absolute;
+  left: -0.12em;
+  right: -0.06em;
+  bottom: 0.04em;
+  height: 0.38em;
+  z-index: -1;
+  border-radius: 6px;
+  background: rgba(224, 87, 79, 0.18);
+  transform: skewX(-8deg);
+}
+.fullname {
+  margin-top: 10px;
+  font-size: clamp(1rem, 1.35vw, 1.2rem);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
 
 .sticker-btn {
   flex-shrink: 0;

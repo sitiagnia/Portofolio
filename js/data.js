@@ -6,50 +6,61 @@
    2. Isi form, klik "Unduh data.js"
    3. Ganti file ini dengan file hasil unduhan (lewat VS Code)
    Atau edit langsung teks di bawah ini di VS Code.
+
+   Dua bahasa: teks yang berbeda antara Indonesia & Inggris ditulis
+   sebagai { "id": "teks Indonesia", "en": "English text" }.
+   Teks yang sama untuk kedua bahasa cukup ditulis biasa: "teks".
    Kolom yang dikosongkan ("") tidak ditampilkan di halaman.
    ========================================================= */
 window.DATA_PORTOFOLIO = {
   "nama": "Siti Agniatul Rohmah",
+  "panggilan": "AGNI",
   "sapaan": ["Hello!", "Halo!", "Hai!", "Hola!", "Annyeong!"],
-  "bio": "Saya lulusan D3 Sistem Informasi dari Politeknik Negeri Subang. Saat ini saya magang sebagai Staff IT di Dahana, dan sebelumnya menjalani PKL sebagai Staff IT di Telkom Subang Centrum. Saya juga berpengalaman berorganisasi di HIMATIKOM hingga menjadi Kepala Biro Kominfo.",
-  "penutup": "Semoga kamu suka portofolio saya!",
+  "bio": {
+    "id": "Saya lulusan D3 Sistem Informasi dari Politeknik Negeri Subang. Saat ini saya magang sebagai Staff IT di Dahana, dan sebelumnya menjalani PKL sebagai Staff IT di Telkom Subang Centrum. Saya juga berpengalaman berorganisasi di HIMATIKOM hingga menjadi Kepala Biro Kominfo.",
+    "en": "I am an Information Systems graduate (Associate Degree, D3) from Politeknik Negeri Subang. I am currently an IT Staff intern at Dahana, and previously completed my field internship as IT Staff at Telkom Subang Centrum. I also have organizational experience in HIMATIKOM, where I became Head of the Communication & Information Bureau."
+  },
+  "penutup": {
+    "id": "Semoga kamu suka portofolio saya!",
+    "en": "Hope you enjoy my portfolio!"
+  },
   "foto": "asset/foto.jpg",
   "skills": [
-    { "label": "HTML", "nama": "HTML", "level": 90, "keterangan": "Menyusun struktur halaman yang rapi, semantik, dan mudah diakses." },
-    { "label": "CSS", "nama": "CSS", "level": 85, "keterangan": "Membuat tampilan responsif dengan Flexbox, Grid, dan animasi." },
-    { "label": "JS", "nama": "JavaScript", "level": 75, "keterangan": "Menambahkan interaksi: form, validasi, dan manipulasi DOM." },
-    { "label": "PHP", "nama": "PHP", "level": 70, "keterangan": "Membangun halaman dinamis dan memproses data form di server." },
-    { "label": "SQL", "nama": "MySQL", "level": 65, "keterangan": "Merancang tabel dan menulis query untuk menyimpan data." },
-    { "label": "Figma", "nama": "Figma", "level": 80, "keterangan": "Merancang wireframe dan desain antarmuka sebelum dikoding." }
+    { "label": "HTML", "nama": "HTML", "level": 90, "keterangan": { "id": "Menyusun struktur halaman yang rapi, semantik, dan mudah diakses.", "en": "Building clean, semantic, and accessible page structures." } },
+    { "label": "CSS", "nama": "CSS", "level": 85, "keterangan": { "id": "Membuat tampilan responsif dengan Flexbox, Grid, dan animasi.", "en": "Creating responsive layouts with Flexbox, Grid, and animations." } },
+    { "label": "JS", "nama": "JavaScript", "level": 75, "keterangan": { "id": "Menambahkan interaksi: form, validasi, dan manipulasi DOM.", "en": "Adding interactivity: forms, validation, and DOM manipulation." } },
+    { "label": "PHP", "nama": "PHP", "level": 70, "keterangan": { "id": "Membangun halaman dinamis dan memproses data form di server.", "en": "Building dynamic pages and processing form data on the server." } },
+    { "label": "SQL", "nama": "MySQL", "level": 65, "keterangan": { "id": "Merancang tabel dan menulis query untuk menyimpan data.", "en": "Designing tables and writing queries to store data." } },
+    { "label": "Figma", "nama": "Figma", "level": 80, "keterangan": { "id": "Merancang wireframe dan desain antarmuka sebelum dikoding.", "en": "Designing wireframes and user interfaces before coding." } }
   ],
   "pendidikan": [
     {
-      "waktu": "Lulus September 2026",
+      "waktu": "September 2026",
       "tempat": "Politeknik Negeri Subang",
-      "jurusan": "D3 Sistem Informasi",
-      "detail": ["IPK 3,40"]
+      "jurusan": { "id": "D3 Sistem Informasi", "en": "Associate Degree (D3) in Information Systems" },
+      "detail": [{ "id": "IPK 3,40", "en": "GPA 3.40" }]
     }
   ],
   "pengalaman": [
     {
-      "waktu": "Sekarang",
-      "peran": "Magang — Staff IT, Dahana",
+      "waktu": { "id": "Sekarang", "en": "Present" },
+      "peran": { "id": "Magang — Staff IT, Dahana", "en": "Intern — IT Staff, Dahana" },
       "detail": []
     },
     {
-      "waktu": "Praktik Kerja Lapangan (PKL)",
-      "peran": "Staff IT, Telkom Subang Centrum",
+      "waktu": { "id": "Praktik Kerja Lapangan (PKL)", "en": "Field Internship (PKL)" },
+      "peran": { "id": "Staff IT, Telkom Subang Centrum", "en": "IT Staff, Telkom Subang Centrum" },
       "detail": []
     },
     {
       "waktu": "2024 – 2025",
-      "peran": "Kepala Biro Kominfo, HIMATIKOM Politeknik Negeri Subang",
-      "detail": ["HIMATIKOM: Himpunan Mahasiswa Teknologi Informasi dan Komputer."]
+      "peran": { "id": "Kepala Biro Kominfo, HIMATIKOM Politeknik Negeri Subang", "en": "Head of Communication & Information Bureau, HIMATIKOM Politeknik Negeri Subang" },
+      "detail": [{ "id": "HIMATIKOM: Himpunan Mahasiswa Teknologi Informasi dan Komputer.", "en": "HIMATIKOM: Information Technology and Computer Student Association." }]
     },
     {
       "waktu": "2023 – 2024",
-      "peran": "Anggota Biro Kominfo, HIMATIKOM Politeknik Negeri Subang",
-      "detail": ["HIMATIKOM: Himpunan Mahasiswa Teknologi Informasi dan Komputer."]
+      "peran": { "id": "Anggota Biro Kominfo, HIMATIKOM Politeknik Negeri Subang", "en": "Member of Communication & Information Bureau, HIMATIKOM Politeknik Negeri Subang" },
+      "detail": [{ "id": "HIMATIKOM: Himpunan Mahasiswa Teknologi Informasi dan Komputer.", "en": "HIMATIKOM: Information Technology and Computer Student Association." }]
     }
   ],
   "kontak": {
@@ -65,7 +76,7 @@ window.DATA_PORTOFOLIO = {
     "jenisKelamin": "",
     "hobi": "",
     "alamat": "",
-    "pendidikanTerakhir": "D3 Sistem Informasi — Politeknik Negeri Subang",
+    "pendidikanTerakhir": { "id": "D3 Sistem Informasi — Politeknik Negeri Subang", "en": "Associate Degree (D3) in Information Systems — Politeknik Negeri Subang" },
     "ipk": "3,40"
   }
 };

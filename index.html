@@ -43,7 +43,7 @@
     <symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></symbol>
   </svg>
 
-  <a href="#konten" class="skip-link">Lewati ke konten utama</a>
+  <a href="#konten" class="skip-link" data-i18n="skip">Lewati ke konten utama</a>
 
   <!-- Bilah kemajuan scroll -->
   <div class="progress" id="progress" aria-hidden="true"></div>
@@ -51,17 +51,19 @@
   <!-- ===================== NAVBAR ===================== -->
   <header class="nav" id="nav">
     <div class="nav-inner">
-      <a href="#beranda" class="nav-logo" aria-label="Kembali ke beranda"><span data-inisial>SA</span><i>.</i></a>
 
-      <nav class="nav-menu" id="navMenu" aria-label="Navigasi utama">
-        <a href="#beranda" class="nav-link">Beranda</a>
-        <a href="#skills" class="nav-link">Skills</a>
-        <a href="#pengalaman" class="nav-link">Pengalaman</a>
-        <a href="#identitas" class="nav-link">Data Diri</a>
-        <a href="#pesan" class="nav-link">Kontak</a>
+      <nav class="nav-menu" id="navMenu" aria-label="Navigasi utama" data-i18n-aria-label="navUtama">
+        <a href="#beranda" class="nav-link" data-i18n="navBeranda">Beranda</a>
+        <a href="#skills" class="nav-link" data-i18n="navSkills">Keahlian</a>
+        <a href="#pengalaman" class="nav-link" data-i18n="navPengalaman">Pengalaman</a>
+        <a href="#identitas" class="nav-link" data-i18n="navDataDiri">Data Diri</a>
+        <a href="#pesan" class="nav-link" data-i18n="navKontak">Kontak</a>
       </nav>
 
       <div class="nav-actions">
+        <button type="button" class="lang-toggle" id="langToggle" aria-label="Switch to English">
+          <span data-lang="id">ID</span><span data-lang="en">EN</span>
+        </button>
         <button type="button" class="icon-btn theme-toggle" id="themeToggle" aria-label="Ganti tema">
           <svg class="ic ic-moon" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>
           <svg class="ic ic-sun" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg>
@@ -91,7 +93,7 @@
           <div class="hello-head">
             <h1 class="hello-title" id="judulHello">Hello!</h1>
             <!-- Stiker: klik untuk mengganti sapaan -->
-            <button type="button" class="sticker-btn" id="sticker" aria-label="Ganti sapaan" title="Klik aku!">
+            <button type="button" class="sticker-btn" id="sticker" aria-label="Ganti sapaan" title="Klik aku!" data-i18n-aria-label="sapaanLabel" data-i18n-title="sapaanTitle">
               <svg class="sticker" viewBox="0 0 120 120" aria-hidden="true" focusable="false">
                 <g fill="#e0574f">
                   <circle cx="96" cy="60" r="20"/><circle cx="85.5" cy="85.5" r="20"/>
@@ -108,18 +110,20 @@
             </button>
           </div>
 
-          <!-- Isi teks di bawah diambil dari js/data.js (nama, bio, penutup) -->
-          <p class="hello-bio">
-            Nama saya <strong id="namaUtama">Siti Agniatul Rohmah</strong>. <span id="isiBio"></span>
-          </p>
+          <!-- Nama panggilan (besar) + nama lengkap, lalu perkenalan. Isinya diambil dari js/data.js -->
+          <div class="name-block">
+            <p class="nickname" id="namaPanggilan">AGNI</p>
+            <p class="fullname" id="namaUtama">Siti Agniatul Rohmah</p>
+          </div>
+          <p class="hello-bio" id="isiBio"></p>
           <p class="hello-bio" id="isiPenutup"></p>
         </div>
 
         <!-- Keahlian: klik ubin untuk melihat detail -->
         <div class="block skills reveal" id="skills" style="--d: 2">
-          <h2 class="block-title">Skills</h2>
+          <h2 class="block-title" data-i18n="judulSkills">Keahlian</h2>
           <!-- Ubin keahlian dibuat dari js/data.js (bagian "skills") -->
-          <div class="skill-grid" id="isiSkills" role="group" aria-label="Pilih keahlian untuk melihat detail"></div>
+          <div class="skill-grid" id="isiSkills" role="group" aria-label="Pilih keahlian untuk melihat detail" data-i18n-aria-label="pilihSkill"></div>
 
           <div class="skill-detail" id="skillDetail" aria-live="polite">
             <div class="skill-detail-head">
@@ -133,27 +137,27 @@
 
         <!-- Pendidikan -->
         <div class="block education reveal" id="pendidikan" style="--d: 3">
-          <h2 class="block-title">Education</h2>
+          <h2 class="block-title" data-i18n="judulPendidikan">Pendidikan</h2>
           <!-- Dibuat dari js/data.js (bagian "pendidikan") -->
           <div id="isiPendidikan"></div>
         </div>
 
         <!-- Pengalaman -->
         <div class="block experience reveal" id="pengalaman" style="--d: 4">
-          <h2 class="block-title">Experience</h2>
+          <h2 class="block-title" data-i18n="judulPengalaman">Pengalaman</h2>
           <!-- Dibuat dari js/data.js (bagian "pengalaman") -->
           <div id="isiPengalaman"></div>
         </div>
 
         <!-- Kontak cepat dibuat dari js/data.js (bagian "kontak"); ikon salin untuk menyalin teks -->
-        <ul class="contact reveal" id="kontak" aria-label="Kontak" style="--d: 5"></ul>
+        <ul class="contact reveal" id="kontak" aria-label="Kontak" data-i18n-aria-label="kontak" style="--d: 5"></ul>
 
       </div>
     </section>
 
     <!-- ===================== DATA DIRI ===================== -->
     <section class="profile" id="identitas" aria-labelledby="judulDataDiri">
-      <h2 class="block-title reveal" id="judulDataDiri">Data Diri</h2>
+      <h2 class="block-title reveal" id="judulDataDiri" data-i18n="judulDataDiri">Data Diri</h2>
       <!-- Dibuat dari js/data.js (nama + bagian "dataDiri") -->
       <dl class="profile-list reveal" id="isiDataDiri"></dl>
     </section>
@@ -161,30 +165,30 @@
     <!-- ===================== KIRIM PESAN ===================== -->
     <section class="message" id="pesan" aria-labelledby="judulPesan">
       <div class="message-intro reveal">
-        <h2 class="block-title" id="judulPesan">Kirim Pesan</h2>
+        <h2 class="block-title" id="judulPesan" data-i18n="judulPesan">Kirim Pesan</h2>
         <p id="introPesan">Ada pertanyaan atau tawaran kerja sama? Tulis pesanmu, lalu kirim lewat WhatsApp atau email.</p>
       </div>
 
       <!-- Nomor WhatsApp & email tujuan diambil dari js/data.js (bagian "kontak") -->
       <form class="message-form reveal" id="formPesan" novalidate style="--d: 1">
         <div class="field">
-          <label for="pesanNama">Nama</label>
-          <input type="text" id="pesanNama" name="nama" autocomplete="name" maxlength="60" placeholder="Nama kamu" required>
+          <label for="pesanNama" data-i18n="labelNama">Nama</label>
+          <input type="text" id="pesanNama" name="nama" autocomplete="name" maxlength="60" placeholder="Nama kamu" data-i18n-placeholder="phNama" required>
         </div>
         <div class="field">
-          <label for="pesanIsi">Pesan</label>
-          <textarea id="pesanIsi" name="pesan" rows="5" maxlength="500" placeholder="Tulis pesanmu di sini…" required></textarea>
+          <label for="pesanIsi" data-i18n="labelPesan">Pesan</label>
+          <textarea id="pesanIsi" name="pesan" rows="5" maxlength="500" placeholder="Tulis pesanmu di sini…" data-i18n-placeholder="phPesan" required></textarea>
           <span class="char-count" id="charCount">0/500</span>
         </div>
         <p class="form-msg" id="pesanMsg" role="status" aria-live="polite"></p>
         <div class="form-actions">
           <button type="submit" class="btn btn-dark" data-via="wa">
             <svg class="ic" aria-hidden="true" focusable="false"><use href="#i-chat"/></svg>
-            Kirim via WhatsApp
+            <span data-i18n="kirimWa">Kirim via WhatsApp</span>
           </button>
           <button type="submit" class="btn btn-light" data-via="email">
             <svg class="ic" aria-hidden="true" focusable="false"><use href="#i-mail"/></svg>
-            Kirim via Email
+            <span data-i18n="kirimEmail">Kirim via Email</span>
           </button>
         </div>
       </form>
@@ -196,13 +200,13 @@
   <footer class="footer">
     <p>&copy; <span id="tahun">2026</span> <span data-nama>Siti Agniatul Rohmah</span></p>
     <a href="#beranda" class="to-top">
-      Kembali ke atas
+      <span data-i18n="keAtas">Kembali ke atas</span>
       <svg class="ic" aria-hidden="true" focusable="false"><use href="#i-up"/></svg>
     </a>
   </footer>
 
   <!-- Tombol melayang kembali ke atas -->
-  <a href="#beranda" class="float-top" id="floatTop" aria-label="Kembali ke atas">
+  <a href="#beranda" class="float-top" id="floatTop" aria-label="Kembali ke atas" data-i18n-aria-label="keAtas">
     <svg class="ic" aria-hidden="true" focusable="false"><use href="#i-up"/></svg>
   </a>
 

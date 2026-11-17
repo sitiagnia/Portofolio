@@ -12,13 +12,101 @@
    - Skills: klik ubin untuk melihat level & keterangan
    - Foto miring 3D mengikuti kursor (desktop)
    - Salin nomor / email, form kirim pesan via WhatsApp / email
+   - Dua bahasa: Indonesia & Inggris (tombol ID | EN)
    ========================================================= */
 'use strict';
 
 /* ---------- Pengaturan ---------- */
 const KUNCI_TEMA = 'portofolio_tema';
+const KUNCI_BAHASA = 'portofolio_bahasa';
 const DATA = window.DATA_PORTOFOLIO || {};               // isi dari js/data.js
 const SAPAAN = (Array.isArray(DATA.sapaan) && DATA.sapaan.length) ? DATA.sapaan : ['Hello!'];
+
+/* ---------- Teks antarmuka dalam dua bahasa ---------- */
+const TEKS = {
+  id: {
+    skip: 'Lewati ke konten utama',
+    navUtama: 'Navigasi utama',
+    navBeranda: 'Beranda', navSkills: 'Keahlian', navPengalaman: 'Pengalaman', navDataDiri: 'Data Diri', navKontak: 'Kontak',
+    keBeranda: 'Kembali ke beranda',
+    temaKeGelap: 'Ganti ke tema gelap', temaKeTerang: 'Ganti ke tema terang',
+    bukaMenu: 'Buka menu', tutupMenu: 'Tutup menu',
+    gantiBahasa: 'Switch to English',
+    sapaanLabel: 'Ganti sapaan', sapaanTitle: 'Klik aku!',
+    judulSkills: 'Keahlian', judulPendidikan: 'Pendidikan', judulPengalaman: 'Pengalaman',
+    judulDataDiri: 'Data Diri', judulPesan: 'Kirim Pesan',
+    pilihSkill: 'Pilih keahlian untuk melihat detail',
+    kontak: 'Kontak',
+    introPesan: (jalur) => `Ada pertanyaan atau tawaran kerja sama? Tulis pesanmu, lalu kirim lewat ${jalur}.`,
+    atau: ' atau ', kontakDiAtas: 'kontak di atas',
+    labelNama: 'Nama', labelPesan: 'Pesan',
+    phNama: 'Nama kamu', phPesan: 'Tulis pesanmu di sini…',
+    kirimWa: 'Kirim via WhatsApp', kirimEmail: 'Kirim via Email',
+    keAtas: 'Kembali ke atas',
+    salin: 'Salin', salinTelepon: 'Salin nomor telepon', salinEmail: 'Salin alamat email',
+    disalin: 'Disalin', gagalSalin: 'Gagal menyalin',
+    errNama: 'Nama belum diisi.', errPesan: 'Pesan terlalu pendek (minimal 5 karakter).',
+    errEmail: 'Email tujuan belum diatur.', errWa: 'Nomor WhatsApp tujuan belum diatur.',
+    sapaPesan: (n) => `Halo, saya ${n}.`, subjek: (n) => `Pesan dari ${n} (portofolio)`,
+    bukaEmail: 'Membuka aplikasi email…', bukaWa: 'Membuka WhatsApp…',
+    judulHalaman: (n) => `${n} | Portofolio`,
+    deskripsi: (n) => `Portofolio pribadi ${n} — profil, keahlian, pengalaman, dan kontak.`,
+    altFoto: (n) => `Foto ${n}`,
+    dd: { nama: 'Nama Lengkap', ttl: 'Tempat, Tanggal Lahir', jk: 'Jenis Kelamin', hobi: 'Hobi', alamat: 'Domisili', pendidikan: 'Pendidikan', ipk: 'IPK', email: 'Email' }
+  },
+  en: {
+    skip: 'Skip to main content',
+    navUtama: 'Main navigation',
+    navBeranda: 'Home', navSkills: 'Skills', navPengalaman: 'Experience', navDataDiri: 'Profile', navKontak: 'Contact',
+    keBeranda: 'Back to home',
+    temaKeGelap: 'Switch to dark theme', temaKeTerang: 'Switch to light theme',
+    bukaMenu: 'Open menu', tutupMenu: 'Close menu',
+    gantiBahasa: 'Ganti ke Bahasa Indonesia',
+    sapaanLabel: 'Change greeting', sapaanTitle: 'Click me!',
+    judulSkills: 'Skills', judulPendidikan: 'Education', judulPengalaman: 'Experience',
+    judulDataDiri: 'Profile', judulPesan: 'Send a Message',
+    pilihSkill: 'Choose a skill to see details',
+    kontak: 'Contact',
+    introPesan: (jalur) => `Have a question or a collaboration offer? Write your message and send it via ${jalur}.`,
+    atau: ' or ', kontakDiAtas: 'the contacts above',
+    labelNama: 'Name', labelPesan: 'Message',
+    phNama: 'Your name', phPesan: 'Write your message here…',
+    kirimWa: 'Send via WhatsApp', kirimEmail: 'Send via Email',
+    keAtas: 'Back to top',
+    salin: 'Copy', salinTelepon: 'Copy phone number', salinEmail: 'Copy email address',
+    disalin: 'Copied', gagalSalin: 'Copy failed',
+    errNama: 'Please enter your name.', errPesan: 'Message is too short (at least 5 characters).',
+    errEmail: 'Destination email is not set.', errWa: 'Destination WhatsApp number is not set.',
+    sapaPesan: (n) => `Hi, I'm ${n}.`, subjek: (n) => `Message from ${n} (portfolio)`,
+    bukaEmail: 'Opening your email app…', bukaWa: 'Opening WhatsApp…',
+    judulHalaman: (n) => `${n} | Portfolio`,
+    deskripsi: (n) => `Personal portfolio of ${n} — profile, skills, experience, and contact.`,
+    altFoto: (n) => `Photo of ${n}`,
+    dd: { nama: 'Full Name', ttl: 'Place, Date of Birth', jk: 'Gender', hobi: 'Hobbies', alamat: 'Location', pendidikan: 'Education', ipk: 'GPA', email: 'Email' }
+  }
+};
+
+/* Bahasa awal: pilihan tersimpan → bahasa browser → Indonesia */
+let bahasa = (() => {
+  let simpan = null;
+  try { simpan = localStorage.getItem(KUNCI_BAHASA); } catch (e) { /* abaikan */ }
+  if (simpan === 'id' || simpan === 'en') return simpan;
+  const nav = (navigator.language || 'id').toLowerCase();
+  return nav.startsWith('id') || nav.startsWith('ms') ? 'id' : 'en';
+})();
+
+/** Teks antarmuka sesuai bahasa aktif. */
+function t(kunci) {
+  return TEKS[bahasa][kunci] ?? TEKS.id[kunci] ?? kunci;
+}
+
+/** Nilai dari data.js: boleh teks biasa atau { "id": "...", "en": "..." }. */
+function pilih(nilai) {
+  if (nilai && typeof nilai === 'object' && !Array.isArray(nilai)) {
+    return nilai[bahasa] || nilai.id || nilai.en || '';
+  }
+  return nilai ?? '';
+}
 
 /* ---------- Penyimpanan aman (localStorage bisa diblokir) ---------- */
 const penyimpanan = {
@@ -108,7 +196,7 @@ function initTema() {
 
   const terapkan = () => {
     const gelap = root.getAttribute('data-theme') === 'dark';
-    const label = gelap ? 'Ganti ke tema terang' : 'Ganti ke tema gelap';
+    const label = gelap ? t('temaKeTerang') : t('temaKeGelap');
     tombol.setAttribute('aria-label', label);
     tombol.setAttribute('title', label);
     if (metaWarna) metaWarna.setAttribute('content', gelap ? '#16171b' : '#efefef');
@@ -120,7 +208,38 @@ function initTema() {
     penyimpanan.tulis(KUNCI_TEMA, temaBaru);
     terapkan();
   });
+  document.addEventListener('gantibahasa', terapkan);
   terapkan();
+}
+
+/* ---------- Bahasa Indonesia / Inggris ---------- */
+/** Mengisi semua elemen bertanda data-i18n (teks) dan data-i18n-* (atribut). */
+function terapkanTeksAntarmuka() {
+  document.documentElement.lang = bahasa;
+  document.querySelectorAll('[data-i18n]').forEach((el) => { el.textContent = t(el.dataset.i18n); });
+  ['aria-label', 'title', 'placeholder'].forEach((attr) => {
+    document.querySelectorAll(`[data-i18n-${attr}]`).forEach((el) => {
+      el.setAttribute(attr, t(el.getAttribute(`data-i18n-${attr}`)));
+    });
+  });
+  const tombol = document.getElementById('langToggle');
+  if (tombol) {
+    tombol.setAttribute('aria-label', t('gantiBahasa'));
+    tombol.title = t('gantiBahasa');
+    tombol.querySelectorAll('[data-lang]').forEach((s) => s.classList.toggle('on', s.dataset.lang === bahasa));
+  }
+}
+
+function initBahasa() {
+  const tombol = document.getElementById('langToggle');
+  if (!tombol) return;
+  tombol.addEventListener('click', () => {
+    bahasa = bahasa === 'id' ? 'en' : 'id';
+    penyimpanan.tulis(KUNCI_BAHASA, bahasa);
+    terapkanTeksAntarmuka();
+    renderData();
+    document.dispatchEvent(new CustomEvent('gantibahasa'));
+  });
 }
 
 /* ---------- Navbar, progres scroll, tombol ke atas ---------- */
@@ -134,19 +253,24 @@ function initNavigasi() {
 
   const tautan = Array.from(menu.querySelectorAll('.nav-link'));
 
+  const labelHamburger = () => {
+    hamburger.setAttribute('aria-label', menu.classList.contains('open') ? t('tutupMenu') : t('bukaMenu'));
+  };
   const tutupMenu = () => {
     menu.classList.remove('open');
     hamburger.classList.remove('active');
     hamburger.setAttribute('aria-expanded', 'false');
-    hamburger.setAttribute('aria-label', 'Buka menu');
+    labelHamburger();
   };
 
   hamburger.addEventListener('click', () => {
     const terbuka = menu.classList.toggle('open');
     hamburger.classList.toggle('active', terbuka);
     hamburger.setAttribute('aria-expanded', String(terbuka));
-    hamburger.setAttribute('aria-label', terbuka ? 'Tutup menu' : 'Buka menu');
+    labelHamburger();
   });
+  document.addEventListener('gantibahasa', labelHamburger);
+  labelHamburger();
   tautan.forEach((link) => link.addEventListener('click', tutupMenu));
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') tutupMenu(); });
   document.addEventListener('click', (e) => { if (!nav.contains(e.target)) tutupMenu(); });
@@ -198,6 +322,7 @@ function initStiker() {
   tombol.addEventListener('click', () => {
     indeks = (indeks + 1) % SAPAAN.length;
     judul.textContent = SAPAAN[indeks];
+    judul.dataset.diganti = "1";
     judul.classList.remove('ganti');
     tombol.classList.remove('putar');
     void judul.offsetWidth;                 // mulai ulang animasi
@@ -222,49 +347,57 @@ function initStiker() {
 }
 
 /* ---------- Skills: klik ubin untuk detail ---------- */
+/* Indeks ubin yang sedang dipilih (-1 = belum ada). Dipertahankan saat bahasa diganti. */
+let skillAktif = -1;
+
+function pilihSkill(indeks) {
+  const ubin = Array.from(document.querySelectorAll('#isiSkills .skill'));
+  const el = ubin[indeks];
+  if (!el) return;
+  skillAktif = indeks;
+  ubin.forEach((u) => {
+    const aktif = u === el;
+    u.classList.toggle('active', aktif);
+    u.setAttribute('aria-pressed', String(aktif));
+  });
+  const level = Math.max(0, Math.min(100, Number(el.dataset.level) || 0));
+  document.getElementById('skillName').textContent = el.dataset.name || el.textContent.trim();
+  document.getElementById('skillPct').textContent = `${level}%`;
+  document.getElementById('skillDesc').textContent = el.dataset.desc || '';
+  document.getElementById('skillBar').style.width = `${level}%`;
+}
+
 function initSkills() {
-  const ubin = Array.from(document.querySelectorAll('.skill'));
-  const nama = document.getElementById('skillName');
-  const persen = document.getElementById('skillPct');
-  const bar = document.getElementById('skillBar');
-  const ket = document.getElementById('skillDesc');
-  if (!ubin.length || !nama || !bar) return;
+  const wadah = document.getElementById('isiSkills');
+  if (!wadah || !wadah.children.length) return;
+  const daftar = () => Array.from(wadah.querySelectorAll('.skill'));
 
-  const pilih = (el) => {
-    ubin.forEach((u) => {
-      const aktif = u === el;
-      u.classList.toggle('active', aktif);
-      u.setAttribute('aria-pressed', String(aktif));
-    });
-    const level = Math.max(0, Math.min(100, Number(el.dataset.level) || 0));
-    nama.textContent = el.dataset.name || el.textContent.trim();
-    persen.textContent = `${level}%`;
-    ket.textContent = el.dataset.desc || '';
-    bar.style.width = `${level}%`;
-  };
+  wadah.addEventListener('click', (e) => {
+    const u = e.target.closest('.skill');
+    if (u) pilihSkill(daftar().indexOf(u));
+  });
 
-  ubin.forEach((u) => u.addEventListener('click', () => pilih(u)));
-
-  // Tombol panah kiri/kanan untuk berpindah antar ubin
-  ubin.forEach((u, i) => u.addEventListener('keydown', (e) => {
+  // Tombol panah untuk berpindah antar ubin
+  wadah.addEventListener('keydown', (e) => {
     const arah = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[e.key];
-    if (!arah) return;
+    const u = e.target.closest('.skill');
+    if (!arah || !u) return;
     e.preventDefault();
-    const tujuan = ubin[(i + arah + ubin.length) % ubin.length];
-    tujuan.focus();
-    pilih(tujuan);
-  }));
+    const semua = daftar();
+    const tujuan = (semua.indexOf(u) + arah + semua.length) % semua.length;
+    semua[tujuan].focus();
+    pilihSkill(tujuan);
+  });
 
   // Pilih ubin pertama; bar baru terisi saat bagian skills terlihat
-  ubin.forEach((u) => u.setAttribute('aria-pressed', 'false'));
   const skills = document.getElementById('skills');
   if ('IntersectionObserver' in window && skills && !kurangiGerak) {
     const obs = new IntersectionObserver((entri) => {
-      if (entri[0].isIntersecting) { pilih(ubin[0]); obs.disconnect(); }
+      if (entri[0].isIntersecting) { if (skillAktif < 0) pilihSkill(0); obs.disconnect(); }
     }, { threshold: 0.3 });
     obs.observe(skills);
   } else {
-    pilih(ubin[0]);
+    pilihSkill(0);
   }
 }
 
@@ -309,19 +442,20 @@ async function salinTeks(teks) {
 }
 
 function initSalin() {
-  document.querySelectorAll('[data-copy]').forEach((tombol) => {
-    tombol.addEventListener('click', async () => {
-      const ok = await salinTeks(tombol.dataset.copy);
-      if (!ok) { tampilkanToast('Gagal menyalin', 'error'); return; }
-      tampilkanToast(`Disalin: ${tombol.dataset.copy}`);
-      const ikon = tombol.querySelector('use');
-      tombol.classList.add('copied');
-      if (ikon) ikon.setAttribute('href', '#i-check');
-      setTimeout(() => {
-        tombol.classList.remove('copied');
-        if (ikon) ikon.setAttribute('href', '#i-copy');
-      }, 1600);
-    });
+  // Satu pendengar untuk semua tombol salin (tetap jalan walau kontak dibuat ulang)
+  document.addEventListener('click', async (e) => {
+    const tombol = e.target.closest('[data-copy]');
+    if (!tombol) return;
+    const ok = await salinTeks(tombol.dataset.copy);
+    if (!ok) { tampilkanToast(t('gagalSalin'), 'error'); return; }
+    tampilkanToast(`${t('disalin')}: ${tombol.dataset.copy}`);
+    const ikon = tombol.querySelector('use');
+    tombol.classList.add('copied');
+    if (ikon) ikon.setAttribute('href', '#i-check');
+    setTimeout(() => {
+      tombol.classList.remove('copied');
+      if (ikon) ikon.setAttribute('href', '#i-copy');
+    }, 1600);
   });
 }
 
@@ -351,24 +485,26 @@ function initPesan() {
 
     nama.parentElement.classList.toggle('invalid', !n);
     isi.parentElement.classList.toggle('invalid', p.length < 5);
-    if (!n) { tulis('Nama belum diisi.', 'error'); nama.focus(); return; }
-    if (p.length < 5) { tulis('Pesan terlalu pendek (minimal 5 karakter).', 'error'); isi.focus(); return; }
+    if (!n) { tulis(t('errNama'), 'error'); nama.focus(); return; }
+    if (p.length < 5) { tulis(t('errPesan'), 'error'); isi.focus(); return; }
 
-    if (via === 'email' && !form.dataset.email) { tulis('Email tujuan belum diatur.', 'error'); return; }
-    if (via !== 'email' && !form.dataset.wa) { tulis('Nomor WhatsApp tujuan belum diatur.', 'error'); return; }
+    if (via === 'email' && !form.dataset.email) { tulis(t('errEmail'), 'error'); return; }
+    if (via !== 'email' && !form.dataset.wa) { tulis(t('errWa'), 'error'); return; }
 
-    const teks = `Halo, saya ${n}.\n\n${p}`;
+    const teks = `${t('sapaPesan')(n)}\n\n${p}`;
     let url;
     if (via === 'email') {
-      const subjek = encodeURIComponent(`Pesan dari ${n} (portofolio)`);
+      const subjek = encodeURIComponent(t('subjek')(n));
       url = `mailto:${form.dataset.email}?subject=${subjek}&body=${encodeURIComponent(teks)}`;
       window.location.href = url;
     } else {
       url = `https://wa.me/${form.dataset.wa}?text=${encodeURIComponent(teks)}`;
       window.open(url, '_blank', 'noopener');
     }
-    tulis(via === 'email' ? 'Membuka aplikasi email…' : 'Membuka WhatsApp…', 'success');
+    tulis(via === 'email' ? t('bukaEmail') : t('bukaWa'), 'success');
   });
+  // Bersihkan pesan status lama saat bahasa diganti
+  document.addEventListener('gantibahasa', () => tulis(''));
 }
 
 /* ---------- Isi halaman dari js/data.js ---------- */
@@ -422,49 +558,61 @@ function renderData() {
   const d = DATA;
   if (!d || !d.nama) return;                     // tanpa data.js: biarkan HTML apa adanya
 
-  // Nama & teks perkenalan
+  // Nama panggilan (besar), nama lengkap & teks perkenalan
   isiTeks('namaUtama', d.nama);
+  const panggilan = document.getElementById('namaPanggilan');
+  if (panggilan) {
+    panggilan.textContent = d.panggilan || '';
+    panggilan.hidden = !d.panggilan;
+  }
   document.querySelectorAll('[data-nama]').forEach((el) => { el.textContent = d.nama; });
-  document.title = `${d.nama} | Portofolio`;
+  document.title = t('judulHalaman')(d.nama);
   const meta = document.querySelector('meta[name="description"]');
-  if (meta) meta.setAttribute('content', `Portofolio pribadi ${d.nama} — profil, keahlian, pengalaman, dan kontak.`);
-  isiTeks('isiBio', d.bio);
-  isiTeks('isiPenutup', d.penutup);
-  if (SAPAAN[0]) isiTeks('judulHello', SAPAAN[0]);
+  if (meta) meta.setAttribute('content', t('deskripsi')(d.nama));
+  isiTeks('isiBio', pilih(d.bio));
+  isiTeks('isiPenutup', pilih(d.penutup));
+  if (SAPAAN[0] && !document.getElementById('judulHello').dataset.diganti) isiTeks('judulHello', SAPAAN[0]);
 
   // Foto
   const bingkai = document.querySelector('[data-avatar]');
   if (bingkai) {
     if (d.foto) bingkai.dataset.default = d.foto;
-    bingkai.dataset.alt = `Foto ${d.nama}`;
+    bingkai.dataset.alt = t('altFoto')(d.nama);
+    const img = bingkai.querySelector('img');
+    if (img) img.alt = bingkai.dataset.alt;
   }
 
   // Skills
   const wadahSkill = document.getElementById('isiSkills');
   if (wadahSkill && Array.isArray(d.skills)) {
     wadahSkill.replaceChildren(...d.skills.filter((s) => s && (s.label || s.nama)).map((s) => {
-      const b = buat('button', 'skill', s.label || s.nama);
+      const nama = pilih(s.nama) || s.label;
+      const b = buat('button', 'skill', s.label || nama);
       b.type = 'button';
-      b.dataset.name = s.nama || s.label;
+      b.dataset.name = nama;
       b.dataset.level = String(s.level ?? 0);
-      b.dataset.desc = s.keterangan || '';
-      b.title = s.nama || s.label;
+      b.dataset.desc = pilih(s.keterangan);
+      b.title = nama;
+      b.setAttribute('aria-pressed', 'false');
       return b;
     }));
     const blokSkill = document.getElementById('skills');
     if (blokSkill) blokSkill.hidden = wadahSkill.children.length === 0;
+    if (skillAktif >= 0) pilihSkill(Math.min(skillAktif, wadahSkill.children.length - 1));
   }
 
   // Pendidikan & pengalaman
+  const detailDari = (daftar) => (daftar || []).map(pilih);
   const wadahPend = document.getElementById('isiPendidikan');
   if (wadahPend && Array.isArray(d.pendidikan)) {
     wadahPend.replaceChildren(...d.pendidikan.map((p) =>
-      buatEntri([p.waktu, p.tempat].filter(Boolean).join(': '), p.jurusan, p.detail)));
+      // Judul: "Kampus · Waktu", mis. "Politeknik Negeri Subang · September 2026"
+      buatEntri([pilih(p.tempat), pilih(p.waktu)].filter(Boolean).join(' · '), pilih(p.jurusan), detailDari(p.detail))));
     document.getElementById('pendidikan').hidden = d.pendidikan.length === 0;
   }
   const wadahPeng = document.getElementById('isiPengalaman');
   if (wadahPeng && Array.isArray(d.pengalaman)) {
-    wadahPeng.replaceChildren(...d.pengalaman.map((p) => buatEntri(p.waktu, p.peran, p.detail)));
+    wadahPeng.replaceChildren(...d.pengalaman.map((p) => buatEntri(pilih(p.waktu), pilih(p.peran), detailDari(p.detail))));
     document.getElementById('pengalaman').hidden = d.pengalaman.length === 0;
   }
 
@@ -483,13 +631,13 @@ function renderData() {
       a.append(bulat, document.createTextNode(teks));
       li.append(a);
       if (salin) {
-        const t = buat('button', 'copy-btn');
-        t.type = 'button';
-        t.dataset.copy = salin;
-        t.title = 'Salin';
-        t.setAttribute('aria-label', labelSalin);
-        t.append(ikon('copy'));
-        li.append(t);
+        const tb = buat('button', 'copy-btn');
+        tb.type = 'button';
+        tb.dataset.copy = salin;
+        tb.title = t('salin');
+        tb.setAttribute('aria-label', labelSalin);
+        tb.append(ikon('copy'));
+        li.append(tb);
       }
       baris.push(li);
     };
@@ -501,8 +649,8 @@ function renderData() {
       .replace(/^(https?:\/\/)?(www\.)?[a-z.]+\.(com|id)\//i, '')
       .replace(/\/+$/, '');
 
-    if (k.telepon) tambah(`tel:${angka(k.telepon)}`, 'phone', k.telepon, angka(k.telepon), 'Salin nomor telepon');
-    if (k.email) tambah(`mailto:${k.email}`, 'mail', k.email, k.email, 'Salin alamat email');
+    if (k.telepon) tambah(`tel:${angka(k.telepon)}`, 'phone', k.telepon, angka(k.telepon), t('salinTelepon'));
+    if (k.email) tambah(`mailto:${k.email}`, 'mail', k.email, k.email, t('salinEmail'));
     if (k.linkedin) {
       const u = namaPengguna(k.linkedin).replace(/^in\//i, '');
       tambah(`https://www.linkedin.com/in/${u}/`, 'linkedin', `in/${u}`, null, '', true);
@@ -531,8 +679,8 @@ function renderData() {
     if (btnEmail) btnEmail.hidden = !formPesan.dataset.email;
     const intro = document.getElementById('introPesan');
     if (intro) {
-      const jalur = [formPesan.dataset.wa && 'WhatsApp', formPesan.dataset.email && 'email'].filter(Boolean).join(' atau ');
-      intro.textContent = `Ada pertanyaan atau tawaran kerja sama? Tulis pesanmu, lalu kirim lewat ${jalur || 'kontak di atas'}.`;
+      const jalur = [formPesan.dataset.wa && 'WhatsApp', formPesan.dataset.email && 'email'].filter(Boolean).join(t('atau'));
+      intro.textContent = t('introPesan')(jalur || t('kontakDiAtas'));
     }
     document.getElementById('pesan').hidden = !formPesan.dataset.wa && !formPesan.dataset.email;
   }
@@ -541,19 +689,23 @@ function renderData() {
   const dl = document.getElementById('isiDataDiri');
   if (dl) {
     const dd = d.dataDiri || {};
+    const label = t('dd');
+    // IPK: koma untuk Indonesia (3,40), titik untuk Inggris (3.40)
+    let ipk = pilih(dd.ipk);
+    if (ipk && typeof dd.ipk === 'string') ipk = bahasa === 'en' ? ipk.replace(',', '.') : ipk.replace('.', ',');
     const pasangan = [
-      ['Nama Lengkap', d.nama],
-      ['Tempat, Tanggal Lahir', dd.tempatTanggalLahir],
-      ['Jenis Kelamin', dd.jenisKelamin],
-      ['Hobi', dd.hobi],
-      ['Alamat', dd.alamat],
-      ['Pendidikan', dd.pendidikanTerakhir],
-      ['IPK', dd.ipk],
-      ['Email', k.email]
+      [label.nama, d.nama],
+      [label.ttl, pilih(dd.tempatTanggalLahir)],
+      [label.jk, pilih(dd.jenisKelamin)],
+      [label.hobi, pilih(dd.hobi)],
+      [label.alamat, pilih(dd.alamat)],
+      [label.pendidikan, pilih(dd.pendidikanTerakhir)],
+      [label.ipk, ipk],
+      [label.email, k.email]
     ].filter(([, nilai]) => nilai && String(nilai).trim());
-    dl.replaceChildren(...pasangan.map(([label, nilai]) => {
+    dl.replaceChildren(...pasangan.map(([lbl, nilai]) => {
       const div = buat('div');
-      div.append(buat('dt', '', label), buat('dd', '', nilai));
+      div.append(buat('dt', '', lbl), buat('dd', '', nilai));
       return div;
     }));
   }
@@ -561,7 +713,9 @@ function renderData() {
 
 /* ---------- Jalankan semua ---------- */
 document.addEventListener('DOMContentLoaded', () => {
+  terapkanTeksAntarmuka();
   renderData();
+  initBahasa();
   initTema();
   initNavigasi();
   initInisial();
