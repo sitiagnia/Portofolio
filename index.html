@@ -32,6 +32,7 @@
     <symbol id="i-mail" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><path d="M22 6l-10 7L2 6"/></symbol>
     <symbol id="i-phone" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></symbol>
     <symbol id="i-github" viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></symbol>
+    <symbol id="i-linkedin" viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></symbol>
     <symbol id="i-instagram" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37zM17.5 6.5h.01"/></symbol>
     <symbol id="i-chat" viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></symbol>
     <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></symbol>
@@ -107,129 +108,45 @@
             </button>
           </div>
 
-          <!-- GANTI: perkenalan (inisial di foto dibuat otomatis dari nama di dalam <strong>) -->
+          <!-- Isi teks di bawah diambil dari js/data.js (nama, bio, penutup) -->
           <p class="hello-bio">
-            Nama saya <strong id="namaUtama">Siti Agniatul Rohmah</strong>. Keahlian utama saya adalah
-            Web Development, UI/UX Design, dan pengolahan data. Saya senang mengubah ide menjadi
-            tampilan yang rapi dan mudah digunakan, dan siap berkontribusi di proyek-proyek yang inovatif.
+            Nama saya <strong id="namaUtama">Siti Agniatul Rohmah</strong>. <span id="isiBio"></span>
           </p>
-          <p class="hello-bio">Semoga kamu suka portofolio saya!</p>
+          <p class="hello-bio" id="isiPenutup"></p>
         </div>
 
         <!-- Keahlian: klik ubin untuk melihat detail -->
         <div class="block skills reveal" id="skills" style="--d: 2">
           <h2 class="block-title">Skills</h2>
-          <!-- GANTI: keahlian. data-level = persen (0–100), data-desc = keterangan singkat -->
-          <div class="skill-grid" role="group" aria-label="Pilih keahlian untuk melihat detail">
-            <button type="button" class="skill" data-name="HTML" data-level="90"
-                    data-desc="Menyusun struktur halaman yang rapi, semantik, dan mudah diakses.">HTML</button>
-            <button type="button" class="skill" data-name="CSS" data-level="85"
-                    data-desc="Membuat tampilan responsif dengan Flexbox, Grid, dan animasi.">CSS</button>
-            <button type="button" class="skill" data-name="JavaScript" data-level="75"
-                    data-desc="Menambahkan interaksi: form, validasi, dan manipulasi DOM.">JS</button>
-            <button type="button" class="skill" data-name="PHP" data-level="70"
-                    data-desc="Membangun halaman dinamis dan memproses data form di server.">PHP</button>
-            <button type="button" class="skill" data-name="MySQL" data-level="65"
-                    data-desc="Merancang tabel dan menulis query untuk menyimpan data.">SQL</button>
-            <button type="button" class="skill" data-name="Figma" data-level="80"
-                    data-desc="Merancang wireframe dan desain antarmuka sebelum dikoding.">Figma</button>
-          </div>
+          <!-- Ubin keahlian dibuat dari js/data.js (bagian "skills") -->
+          <div class="skill-grid" id="isiSkills" role="group" aria-label="Pilih keahlian untuk melihat detail"></div>
 
           <div class="skill-detail" id="skillDetail" aria-live="polite">
             <div class="skill-detail-head">
-              <strong id="skillName">HTML</strong>
-              <span id="skillPct">90%</span>
+              <strong id="skillName"></strong>
+              <span id="skillPct"></span>
             </div>
             <div class="skill-bar"><span id="skillBar"></span></div>
-            <p id="skillDesc">Menyusun struktur halaman yang rapi, semantik, dan mudah diakses.</p>
+            <p id="skillDesc"></p>
           </div>
         </div>
 
         <!-- Pendidikan -->
         <div class="block education reveal" id="pendidikan" style="--d: 3">
           <h2 class="block-title">Education</h2>
-          <!-- GANTI: riwayat pendidikan -->
-          <details class="entry">
-            <summary>
-              <span>
-                <span class="entry-year">2022 – Sekarang: Universitas Contoh</span>
-                <span class="entry-text">Program Studi Teknik Informatika</span>
-              </span>
-              <svg class="ic entry-chev" aria-hidden="true" focusable="false"><use href="#i-down"/></svg>
-            </summary>
-            <ul class="entry-detail">
-              <li>Fokus pada pemrograman web dan basis data.</li>
-              <li>Aktif di kegiatan himpunan dan kelas daring.</li>
-            </ul>
-          </details>
+          <!-- Dibuat dari js/data.js (bagian "pendidikan") -->
+          <div id="isiPendidikan"></div>
         </div>
 
         <!-- Pengalaman -->
         <div class="block experience reveal" id="pengalaman" style="--d: 4">
           <h2 class="block-title">Experience</h2>
-          <!-- GANTI: riwayat pengalaman -->
-          <details class="entry">
-            <summary>
-              <span>
-                <span class="entry-year">2023 – 2024</span>
-                <span class="entry-text">Anggota Divisi Web, Himpunan Mahasiswa</span>
-              </span>
-              <svg class="ic entry-chev" aria-hidden="true" focusable="false"><use href="#i-down"/></svg>
-            </summary>
-            <ul class="entry-detail">
-              <li>Membuat dan merawat website himpunan.</li>
-              <li>Mendesain poster dan materi publikasi acara.</li>
-            </ul>
-          </details>
-          <details class="entry">
-            <summary>
-              <span>
-                <span class="entry-year">2024 – Sekarang</span>
-                <span class="entry-text">Freelance Web Developer</span>
-              </span>
-              <svg class="ic entry-chev" aria-hidden="true" focusable="false"><use href="#i-down"/></svg>
-            </summary>
-            <ul class="entry-detail">
-              <li>Membuat landing page untuk UMKM lokal.</li>
-              <li>Mengubah desain Figma menjadi halaman web responsif.</li>
-            </ul>
-          </details>
+          <!-- Dibuat dari js/data.js (bagian "pengalaman") -->
+          <div id="isiPengalaman"></div>
         </div>
 
-        <!-- Kontak cepat (ikon salin untuk menyalin teks) -->
-        <!-- GANTI: nomor, email, dan tautan -->
-        <ul class="contact reveal" id="kontak" aria-label="Kontak" style="--d: 5">
-          <li>
-            <a href="tel:+6281234567890">
-              <span class="contact-ic"><svg class="ic" aria-hidden="true" focusable="false"><use href="#i-phone"/></svg></span>
-              0812 3456 7890
-            </a>
-            <button type="button" class="copy-btn" data-copy="081234567890" aria-label="Salin nomor telepon" title="Salin">
-              <svg class="ic" aria-hidden="true" focusable="false"><use href="#i-copy"/></svg>
-            </button>
-          </li>
-          <li>
-            <a href="mailto:andi.pratama@example.com">
-              <span class="contact-ic"><svg class="ic" aria-hidden="true" focusable="false"><use href="#i-mail"/></svg></span>
-              andi.pratama@example.com
-            </a>
-            <button type="button" class="copy-btn" data-copy="andi.pratama@example.com" aria-label="Salin alamat email" title="Salin">
-              <svg class="ic" aria-hidden="true" focusable="false"><use href="#i-copy"/></svg>
-            </button>
-          </li>
-          <li>
-            <a href="#" target="_blank" rel="noopener">
-              <span class="contact-ic"><svg class="ic" aria-hidden="true" focusable="false"><use href="#i-github"/></svg></span>
-              github.com/username
-            </a>
-          </li>
-          <li>
-            <a href="#" target="_blank" rel="noopener">
-              <span class="contact-ic"><svg class="ic" aria-hidden="true" focusable="false"><use href="#i-instagram"/></svg></span>
-              @username
-            </a>
-          </li>
-        </ul>
+        <!-- Kontak cepat dibuat dari js/data.js (bagian "kontak"); ikon salin untuk menyalin teks -->
+        <ul class="contact reveal" id="kontak" aria-label="Kontak" style="--d: 5"></ul>
 
       </div>
     </section>
@@ -237,26 +154,19 @@
     <!-- ===================== DATA DIRI ===================== -->
     <section class="profile" id="identitas" aria-labelledby="judulDataDiri">
       <h2 class="block-title reveal" id="judulDataDiri">Data Diri</h2>
-      <!-- GANTI: semua isi <dd> -->
-      <dl class="profile-list reveal">
-        <div><dt>Nama Lengkap</dt><dd>Siti Agniatul Rohmah</dd></div>
-        <div><dt>Tempat, Tanggal Lahir</dt><dd>Bandung, 17 Agustus 2004</dd></div>
-        <div><dt>Jenis Kelamin</dt><dd>Laki-laki</dd></div>
-        <div><dt>Hobi</dt><dd>Membaca, desain, musik</dd></div>
-        <div><dt>Alamat</dt><dd>Jl. Merdeka No. 10, Kota Bandung, Jawa Barat</dd></div>
-        <div><dt>Pendidikan</dt><dd>S1 Teknik Informatika — Universitas Contoh</dd></div>
-      </dl>
+      <!-- Dibuat dari js/data.js (nama + bagian "dataDiri") -->
+      <dl class="profile-list reveal" id="isiDataDiri"></dl>
     </section>
 
     <!-- ===================== KIRIM PESAN ===================== -->
     <section class="message" id="pesan" aria-labelledby="judulPesan">
       <div class="message-intro reveal">
         <h2 class="block-title" id="judulPesan">Kirim Pesan</h2>
-        <p>Ada pertanyaan atau tawaran kerja sama? Tulis pesanmu, lalu kirim lewat WhatsApp atau email.</p>
+        <p id="introPesan">Ada pertanyaan atau tawaran kerja sama? Tulis pesanmu, lalu kirim lewat WhatsApp atau email.</p>
       </div>
 
-      <!-- GANTI: data-wa (nomor WhatsApp, format 62...) dan data-email -->
-      <form class="message-form reveal" id="formPesan" data-wa="6281234567890" data-email="andi.pratama@example.com" novalidate style="--d: 1">
+      <!-- Nomor WhatsApp & email tujuan diambil dari js/data.js (bagian "kontak") -->
+      <form class="message-form reveal" id="formPesan" novalidate style="--d: 1">
         <div class="field">
           <label for="pesanNama">Nama</label>
           <input type="text" id="pesanNama" name="nama" autocomplete="name" maxlength="60" placeholder="Nama kamu" required>
@@ -284,7 +194,7 @@
 
   <!-- ===================== FOOTER ===================== -->
   <footer class="footer">
-    <p>&copy; <span id="tahun">2026</span> Siti Agniatul Rohmah</p>
+    <p>&copy; <span id="tahun">2026</span> <span data-nama>Siti Agniatul Rohmah</span></p>
     <a href="#beranda" class="to-top">
       Kembali ke atas
       <svg class="ic" aria-hidden="true" focusable="false"><use href="#i-up"/></svg>
@@ -299,6 +209,8 @@
   <!-- Notifikasi kecil -->
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+  <!-- Isi portofolio (ubah lewat isi-data.html atau langsung di VS Code) -->
+  <script src="js/data.js"></script>
   <script src="js/script.js"></script>
 </body>
 </html>

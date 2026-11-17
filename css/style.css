@@ -403,6 +403,8 @@ section[id],
 }
 .entry summary:hover .entry-chev { background: var(--ink); color: var(--on-ink); border-color: var(--ink); }
 .entry[open] .entry-chev { transform: rotate(180deg); }
+.entry.tanpa-detail summary { cursor: default; }
+.entry.tanpa-detail .entry-chev { display: none; }
 .entry-detail {
   margin-top: 12px;
   padding-left: 16px;

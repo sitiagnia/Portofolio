@@ -17,7 +17,8 @@
 
 /* ---------- Pengaturan ---------- */
 const KUNCI_TEMA = 'portofolio_tema';
-const SAPAAN = ['Hello!', 'Halo!', 'Hai!', 'Hola!', 'Annyeong!'];   // GANTI: daftar sapaan stiker
+const DATA = window.DATA_PORTOFOLIO || {};               // isi dari js/data.js
+const SAPAAN = (Array.isArray(DATA.sapaan) && DATA.sapaan.length) ? DATA.sapaan : ['Hello!'];
 
 /* ---------- Penyimpanan aman (localStorage bisa diblokir) ---------- */
 const penyimpanan = {
@@ -353,6 +354,9 @@ function initPesan() {
     if (!n) { tulis('Nama belum diisi.', 'error'); nama.focus(); return; }
     if (p.length < 5) { tulis('Pesan terlalu pendek (minimal 5 karakter).', 'error'); isi.focus(); return; }
 
+    if (via === 'email' && !form.dataset.email) { tulis('Email tujuan belum diatur.', 'error'); return; }
+    if (via !== 'email' && !form.dataset.wa) { tulis('Nomor WhatsApp tujuan belum diatur.', 'error'); return; }
+
     const teks = `Halo, saya ${n}.\n\n${p}`;
     let url;
     if (via === 'email') {
@@ -367,8 +371,197 @@ function initPesan() {
   });
 }
 
+/* ---------- Isi halaman dari js/data.js ---------- */
+/* Semua teks dimasukkan lewat textContent, jadi aman dari kode HTML yang tidak sengaja ikut terketik. */
+function buat(tag, kelas, teks) {
+  const el = document.createElement(tag);
+  if (kelas) el.className = kelas;
+  if (teks !== undefined && teks !== null) el.textContent = teks;
+  return el;
+}
+
+function ikon(nama, kelas = 'ic') {
+  const ns = 'http://www.w3.org/2000/svg';
+  const svg = document.createElementNS(ns, 'svg');
+  svg.setAttribute('class', kelas);
+  svg.setAttribute('aria-hidden', 'true');
+  svg.setAttribute('focusable', 'false');
+  const use = document.createElementNS(ns, 'use');
+  use.setAttribute('href', `#i-${nama}`);
+  svg.appendChild(use);
+  return svg;
+}
+
+function isiTeks(id, teks) {
+  const el = document.getElementById(id);
+  if (el && teks) el.textContent = teks;
+}
+
+/** Membuat satu entri pendidikan/pengalaman yang bisa dibuka-tutup. */
+function buatEntri(judul, subjudul, detail) {
+  const entri = buat('details', 'entry');
+  const ringkas = document.createElement('summary');
+  const teks = buat('span');
+  teks.append(buat('span', 'entry-year', judul));
+  if (subjudul) teks.append(buat('span', 'entry-text', subjudul));
+  ringkas.append(teks, ikon('down', 'ic entry-chev'));
+  entri.append(ringkas);
+
+  const butir = (detail || []).filter((d) => String(d).trim());
+  if (butir.length) {
+    const daftar = buat('ul', 'entry-detail');
+    butir.forEach((d) => daftar.append(buat('li', '', d)));
+    entri.append(daftar);
+  } else {
+    entri.classList.add('tanpa-detail');
+  }
+  return entri;
+}
+
+function renderData() {
+  const d = DATA;
+  if (!d || !d.nama) return;                     // tanpa data.js: biarkan HTML apa adanya
+
+  // Nama & teks perkenalan
+  isiTeks('namaUtama', d.nama);
+  document.querySelectorAll('[data-nama]').forEach((el) => { el.textContent = d.nama; });
+  document.title = `${d.nama} | Portofolio`;
+  const meta = document.querySelector('meta[name="description"]');
+  if (meta) meta.setAttribute('content', `Portofolio pribadi ${d.nama} — profil, keahlian, pengalaman, dan kontak.`);
+  isiTeks('isiBio', d.bio);
+  isiTeks('isiPenutup', d.penutup);
+  if (SAPAAN[0]) isiTeks('judulHello', SAPAAN[0]);
+
+  // Foto
+  const bingkai = document.querySelector('[data-avatar]');
+  if (bingkai) {
+    if (d.foto) bingkai.dataset.default = d.foto;
+    bingkai.dataset.alt = `Foto ${d.nama}`;
+  }
+
+  // Skills
+  const wadahSkill = document.getElementById('isiSkills');
+  if (wadahSkill && Array.isArray(d.skills)) {
+    wadahSkill.replaceChildren(...d.skills.filter((s) => s && (s.label || s.nama)).map((s) => {
+      const b = buat('button', 'skill', s.label || s.nama);
+      b.type = 'button';
+      b.dataset.name = s.nama || s.label;
+      b.dataset.level = String(s.level ?? 0);
+      b.dataset.desc = s.keterangan || '';
+      b.title = s.nama || s.label;
+      return b;
+    }));
+    const blokSkill = document.getElementById('skills');
+    if (blokSkill) blokSkill.hidden = wadahSkill.children.length === 0;
+  }
+
+  // Pendidikan & pengalaman
+  const wadahPend = document.getElementById('isiPendidikan');
+  if (wadahPend && Array.isArray(d.pendidikan)) {
+    wadahPend.replaceChildren(...d.pendidikan.map((p) =>
+      buatEntri([p.waktu, p.tempat].filter(Boolean).join(': '), p.jurusan, p.detail)));
+    document.getElementById('pendidikan').hidden = d.pendidikan.length === 0;
+  }
+  const wadahPeng = document.getElementById('isiPengalaman');
+  if (wadahPeng && Array.isArray(d.pengalaman)) {
+    wadahPeng.replaceChildren(...d.pengalaman.map((p) => buatEntri(p.waktu, p.peran, p.detail)));
+    document.getElementById('pengalaman').hidden = d.pengalaman.length === 0;
+  }
+
+  // Kontak cepat
+  const k = d.kontak || {};
+  const wadahKontak = document.getElementById('kontak');
+  if (wadahKontak) {
+    const baris = [];
+    const tambah = (href, ikonNama, teks, salin, labelSalin, luar) => {
+      const li = buat('li');
+      const a = buat('a');
+      a.href = href;
+      if (luar) { a.target = '_blank'; a.rel = 'noopener'; }
+      const bulat = buat('span', 'contact-ic');
+      bulat.append(ikon(ikonNama));
+      a.append(bulat, document.createTextNode(teks));
+      li.append(a);
+      if (salin) {
+        const t = buat('button', 'copy-btn');
+        t.type = 'button';
+        t.dataset.copy = salin;
+        t.title = 'Salin';
+        t.setAttribute('aria-label', labelSalin);
+        t.append(ikon('copy'));
+        li.append(t);
+      }
+      baris.push(li);
+    };
+    const angka = (s) => String(s || '').replace(/[^\d+]/g, '');
+    // Ambil username dari username biasa, "@username", atau link lengkap (tanpa ?query / #hash)
+    const namaPengguna = (s) => String(s || '').trim()
+      .replace(/[?#].*$/, '')
+      .replace(/^@/, '')
+      .replace(/^(https?:\/\/)?(www\.)?[a-z.]+\.(com|id)\//i, '')
+      .replace(/\/+$/, '');
+
+    if (k.telepon) tambah(`tel:${angka(k.telepon)}`, 'phone', k.telepon, angka(k.telepon), 'Salin nomor telepon');
+    if (k.email) tambah(`mailto:${k.email}`, 'mail', k.email, k.email, 'Salin alamat email');
+    if (k.linkedin) {
+      const u = namaPengguna(k.linkedin).replace(/^in\//i, '');
+      tambah(`https://www.linkedin.com/in/${u}/`, 'linkedin', `in/${u}`, null, '', true);
+    }
+    if (k.github) {
+      const u = namaPengguna(k.github);
+      tambah(`https://github.com/${u}`, 'github', `github.com/${u}`, null, '', true);
+    }
+    if (k.instagram) {
+      const u = namaPengguna(k.instagram);
+      tambah(`https://instagram.com/${u}`, 'instagram', `@${u}`, null, '', true);
+    }
+    wadahKontak.replaceChildren(...baris);
+    wadahKontak.hidden = baris.length === 0;
+  }
+
+  // Tujuan form pesan
+  const formPesan = document.getElementById('formPesan');
+  if (formPesan) {
+    formPesan.dataset.wa = String(k.whatsapp || '').replace(/\D/g, '');
+    formPesan.dataset.email = k.email || '';
+    // Sembunyikan tombol kirim yang tujuannya belum diatur
+    const btnWa = formPesan.querySelector('[data-via="wa"]');
+    const btnEmail = formPesan.querySelector('[data-via="email"]');
+    if (btnWa) btnWa.hidden = !formPesan.dataset.wa;
+    if (btnEmail) btnEmail.hidden = !formPesan.dataset.email;
+    const intro = document.getElementById('introPesan');
+    if (intro) {
+      const jalur = [formPesan.dataset.wa && 'WhatsApp', formPesan.dataset.email && 'email'].filter(Boolean).join(' atau ');
+      intro.textContent = `Ada pertanyaan atau tawaran kerja sama? Tulis pesanmu, lalu kirim lewat ${jalur || 'kontak di atas'}.`;
+    }
+    document.getElementById('pesan').hidden = !formPesan.dataset.wa && !formPesan.dataset.email;
+  }
+
+  // Data diri
+  const dl = document.getElementById('isiDataDiri');
+  if (dl) {
+    const dd = d.dataDiri || {};
+    const pasangan = [
+      ['Nama Lengkap', d.nama],
+      ['Tempat, Tanggal Lahir', dd.tempatTanggalLahir],
+      ['Jenis Kelamin', dd.jenisKelamin],
+      ['Hobi', dd.hobi],
+      ['Alamat', dd.alamat],
+      ['Pendidikan', dd.pendidikanTerakhir],
+      ['IPK', dd.ipk],
+      ['Email', k.email]
+    ].filter(([, nilai]) => nilai && String(nilai).trim());
+    dl.replaceChildren(...pasangan.map(([label, nilai]) => {
+      const div = buat('div');
+      div.append(buat('dt', '', label), buat('dd', '', nilai));
+      return div;
+    }));
+  }
+}
+
 /* ---------- Jalankan semua ---------- */
 document.addEventListener('DOMContentLoaded', () => {
+  renderData();
   initTema();
   initNavigasi();
   initInisial();
