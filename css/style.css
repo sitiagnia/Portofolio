@@ -1,7 +1,7 @@
 /* =========================================================
    PORTOFOLIO — style.css
    Gaya "lembar profil": latar abu terang, judul tebal besar,
-   foto bersudut membulat, ubin keahlian berwarna utama #002967.
+   foto bersudut membulat, ubin keahlian gelap.
 
    Ukuran layar:
    - Desktop : > 1100px  (3 kolom)
@@ -19,12 +19,7 @@
   --muted: #7a7e88;
   --line: #d6d6d6;
   --on-ink: #f3f3f3;
-  /* Warna utama (primary) */
-  --primary: #002967;      /* latar ubin, tombol, menu aktif */
-  --on-primary: #ffffff;   /* teks di atas warna utama */
-  --primary-text: #002967; /* teks berwarna utama (mis. nama AGNI) */
-  --accent: #2f62c4;       /* biru lebih terang untuk hover & pilihan aktif */
-  --accent-soft: rgba(0, 41, 103, 0.14);
+  --accent: #e0574f;       /* merah stiker */
 
   --success: #2e7d32;
   --danger: #c0392b;
@@ -47,11 +42,6 @@
   --muted: #8a8e98;
   --line: #2f3139;
   --on-ink: #16171b;
-  --primary: #23488c;
-  --on-primary: #ffffff;
-  --primary-text: #9db8ff;
-  --accent: #5b8ae6;
-  --accent-soft: rgba(157, 184, 255, 0.2);
   --success: #66bb6a;
   --danger: #ef6f62;
   --shadow: 0 20px 40px -24px rgba(0, 0, 0, 0.8);
@@ -83,7 +73,7 @@ input, textarea { font: inherit; color: inherit; }
 [hidden] { display: none !important; }
 
 :focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
-::selection { background: var(--primary); color: var(--on-primary); }
+::selection { background: var(--ink); color: var(--on-ink); }
 
 .visually-hidden {
   position: absolute !important;
@@ -101,8 +91,8 @@ input, textarea { font: inherit; color: inherit; }
   z-index: 200;
   padding: 10px 16px;
   border-radius: 10px;
-  background: var(--primary);
-  color: var(--on-primary);
+  background: var(--ink);
+  color: var(--on-ink);
   font-weight: 600;
   transform: translateY(-200%);
   transition: transform 0.2s ease;
@@ -172,7 +162,7 @@ section[id],
   transition: color 0.2s ease, background-color 0.2s ease;
 }
 .nav-link:hover { color: var(--ink); }
-.nav-link.active { color: var(--on-primary); background: var(--primary); }
+.nav-link.active { color: var(--on-ink); background: var(--ink); }
 
 .nav-actions { display: flex; align-items: center; gap: 8px; margin-left: auto; }
 .icon-btn {
@@ -213,7 +203,7 @@ section[id],
   color: var(--muted);
   transition: background-color 0.25s ease, color 0.25s ease;
 }
-.lang-toggle span.on { background: var(--primary); color: var(--on-primary); }
+.lang-toggle span.on { background: var(--ink); color: var(--on-ink); }
 .theme-toggle .ic-sun { display: none; }
 :root[data-theme="dark"] .theme-toggle .ic-sun { display: block; }
 :root[data-theme="dark"] .theme-toggle .ic-moon { display: none; }
@@ -260,7 +250,7 @@ section[id],
   display: grid;
   place-items: center;
   overflow: hidden;
-  background: linear-gradient(160deg, #1d4a9a, #002967 55%, #001638);
+  background: linear-gradient(160deg, #464b57, #262930);
   color: #f3f3f3;
 }
 .photo-frame {
@@ -315,7 +305,7 @@ section[id],
   font-weight: 900;
   line-height: 1;
   letter-spacing: 0.06em;
-  color: var(--primary-text);
+  color: var(--accent);
   isolation: isolate;
 }
 /* Efek stabilo di belakang nama panggilan */
@@ -328,7 +318,7 @@ section[id],
   height: 0.38em;
   z-index: -1;
   border-radius: 6px;
-  background: var(--accent-soft);
+  background: rgba(224, 87, 79, 0.18);
   transform: skewX(-8deg);
 }
 .fullname {
@@ -351,7 +341,7 @@ section[id],
   height: auto;
   transform: rotate(-10deg);
   animation: goyang 4s ease-in-out infinite;
-  filter: drop-shadow(0 10px 14px rgba(0, 41, 103, 0.25));
+  filter: drop-shadow(0 10px 14px rgba(224, 87, 79, 0.25));
   transition: transform 0.2s ease;
 }
 .sticker-btn:hover .sticker { animation-play-state: paused; transform: rotate(0) scale(1.08); }
@@ -392,8 +382,8 @@ section[id],
   aspect-ratio: 1;
   border-radius: 18px;
   border: 2px solid transparent;
-  background: var(--primary);
-  color: var(--on-primary);
+  background: var(--ink);
+  color: var(--on-ink);
   font-size: clamp(0.95rem, 1.25vw, 1.2rem);
   font-weight: 600;
   letter-spacing: -0.01em;
@@ -418,7 +408,7 @@ section[id],
 }
 .skill-detail-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
 .skill-detail-head strong { font-size: 1.05rem; font-weight: 700; }
-.skill-detail-head span { font-size: 0.95rem; font-weight: 700; color: var(--primary-text); }
+.skill-detail-head span { font-size: 0.95rem; font-weight: 700; color: var(--accent); }
 .skill-bar {
   height: 8px;
   margin: 10px 0 10px;
@@ -470,7 +460,7 @@ section[id],
   border: 1px solid var(--line);
   transition: transform 0.3s ease, background-color 0.2s ease, color 0.2s ease;
 }
-.entry summary:hover .entry-chev { background: var(--primary); color: var(--on-primary); border-color: var(--primary); }
+.entry summary:hover .entry-chev { background: var(--ink); color: var(--on-ink); border-color: var(--ink); }
 .entry[open] .entry-chev { transform: rotate(180deg); }
 .entry.tanpa-detail summary { cursor: default; }
 .entry.tanpa-detail .entry-chev { display: none; }
@@ -503,15 +493,15 @@ section[id],
   transition: color 0.2s ease;
   overflow-wrap: anywhere;
 }
-.contact a:hover { color: var(--primary-text); }
+.contact a:hover { color: var(--accent); }
 .contact-ic {
   display: grid;
   place-items: center;
   flex-shrink: 0;
   width: 30px; height: 30px;
   border-radius: 50%;
-  background: var(--primary);
-  color: var(--on-primary);
+  background: var(--ink);
+  color: var(--on-ink);
   transition: background-color 0.2s ease, transform 0.2s ease;
 }
 .contact a:hover .contact-ic { background: var(--accent); color: #fff; transform: rotate(-10deg); }
@@ -573,7 +563,7 @@ section[id],
   color: var(--muted);
 }
 .to-top { display: inline-flex; align-items: center; gap: 6px; font-weight: 600; color: var(--ink); }
-.to-top:hover { color: var(--primary-text); }
+.to-top:hover { color: var(--accent); }
 .to-top .ic { width: 16px; height: 16px; }
 
 .float-top {
@@ -585,8 +575,8 @@ section[id],
   place-items: center;
   width: 50px; height: 50px;
   border-radius: 50%;
-  background: var(--primary);
-  color: var(--on-primary);
+  background: var(--ink);
+  color: var(--on-ink);
   box-shadow: var(--shadow);
   opacity: 0;
   visibility: hidden;
@@ -613,7 +603,7 @@ section[id],
 }
 .btn .ic { width: 18px; height: 18px; }
 .btn:active:not(:disabled) { transform: scale(0.97); }
-.btn-dark { background: var(--primary); color: var(--on-primary); }
+.btn-dark { background: var(--ink); color: var(--on-ink); }
 .btn-dark:hover:not(:disabled) { background: var(--accent); color: #fff; }
 .btn-light { background: var(--surface); border-color: var(--line); }
 .btn-light:hover { border-color: var(--ink); }
@@ -628,8 +618,8 @@ section[id],
   max-width: calc(100% - 32px);
   padding: 12px 22px;
   border-radius: 999px;
-  background: var(--primary);
-  color: var(--on-primary);
+  background: var(--ink);
+  color: var(--on-ink);
   font-size: 0.92rem;
   font-weight: 500;
   text-align: center;
@@ -793,7 +783,7 @@ section[id],
   transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 .chip-filter:hover { border-color: var(--ink); color: var(--ink); }
-.chip-filter[aria-pressed="true"] { background: var(--primary); border-color: var(--primary); color: var(--on-primary); }
+.chip-filter[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--on-ink); }
 .chip-jumlah {
   min-width: 22px;
   padding: 1px 7px;
@@ -859,7 +849,7 @@ section[id],
   stroke-width: 1.5;
   transition: transform 0.5s ease;
 }
-.warna-logo    { background: linear-gradient(135deg, #002967, #2f62c4); }
+.warna-logo    { background: linear-gradient(135deg, #e0574f, #f4a261); }
 .warna-grafis  { background: linear-gradient(135deg, #6c5ce7, #a29bfe); }
 .warna-uiux    { background: linear-gradient(135deg, #0f9d8f, #56cfb2); }
 .warna-web     { background: linear-gradient(135deg, #2d3038, #5b6070); }
@@ -930,7 +920,7 @@ section[id],
   gap: 14px;
   padding: clamp(24px, 4vw, 44px);
 }
-.detail-meta { font-size: 0.85rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--primary-text); }
+.detail-meta { font-size: 0.85rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
 .detail-judul { font-size: clamp(1.6rem, 3vw, 2.3rem); font-weight: 800; line-height: 1.1; letter-spacing: -0.01em; }
 .detail-deskripsi { color: var(--ink-soft); font-size: 1.05rem; white-space: pre-line; }
 .detail-alat { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
@@ -951,7 +941,7 @@ section[id],
   box-shadow: var(--shadow);
   transition: background-color 0.2s ease, color 0.2s ease;
 }
-.dialog-btn:hover { background: var(--primary); color: var(--on-primary); }
+.dialog-btn:hover { background: var(--ink); color: var(--on-ink); }
 .dialog-close { top: 14px; right: 14px; }
 .dialog-prev { top: 50%; left: -22px; transform: translateY(-50%); }
 .dialog-next { top: 50%; right: -22px; transform: translateY(-50%); }
