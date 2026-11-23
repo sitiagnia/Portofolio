@@ -27,7 +27,7 @@ const TEKS = {
   id: {
     skip: 'Lewati ke konten utama',
     navUtama: 'Navigasi utama',
-    navBeranda: 'Beranda', navSkills: 'Keahlian', navPengalaman: 'Pengalaman', navDataDiri: 'Data Diri', navKontak: 'Kontak',
+    navBeranda: 'Beranda', navSkills: 'Keahlian', navPengalaman: 'Pengalaman', navDataDiri: 'Data Diri', navKontak: 'Kontak', navKarya: 'Karya',
     keBeranda: 'Kembali ke beranda',
     temaKeGelap: 'Ganti ke tema gelap', temaKeTerang: 'Ganti ke tema terang',
     bukaMenu: 'Buka menu', tutupMenu: 'Tutup menu',
@@ -52,12 +52,22 @@ const TEKS = {
     judulHalaman: (n) => `${n} | Portofolio`,
     deskripsi: (n) => `Portofolio pribadi ${n} — profil, keahlian, pengalaman, dan kontak.`,
     altFoto: (n) => `Foto ${n}`,
-    dd: { nama: 'Nama Lengkap', ttl: 'Tempat, Tanggal Lahir', jk: 'Jenis Kelamin', hobi: 'Hobi', alamat: 'Domisili', pendidikan: 'Pendidikan', ipk: 'IPK', email: 'Email' }
+    dd: { nama: 'Nama Lengkap', ttl: 'Tempat, Tanggal Lahir', jk: 'Jenis Kelamin', hobi: 'Hobi', alamat: 'Domisili', pendidikan: 'Pendidikan', ipk: 'IPK', email: 'Email' },
+    karyaKicker: 'Hasil Karya', karyaJudul: 'Karya Saya',
+    karyaSub: 'Kumpulan hasil karya saya, mulai dari desain logo, desain grafis, hingga desain antarmuka dan website.',
+    lihatKarya: 'Lihat karya saya',
+    filterLabel: 'Saring berdasarkan kategori', semua: 'Semua',
+    kategori: { logo: 'Desain Logo', grafis: 'Desain Grafis', uiux: 'UI/UX', web: 'Website', video: 'Video', lainnya: 'Lainnya' },
+    kosong: 'Karya akan segera ditambahkan. Nantikan, ya!',
+    lihatDetail: 'Lihat detail', tutup: 'Tutup', sebelumnya: 'Karya sebelumnya', berikutnya: 'Karya berikutnya',
+    kunjungi: 'Lihat karya', alat: 'Alat', contoh: 'Contoh',
+    judulHalamanKarya: (n) => `Karya | ${n}`,
+    deskripsiKarya: (n) => `Kumpulan hasil karya ${n}: desain logo, desain grafis, UI/UX, dan website.`,
   },
   en: {
     skip: 'Skip to main content',
     navUtama: 'Main navigation',
-    navBeranda: 'Home', navSkills: 'Skills', navPengalaman: 'Experience', navDataDiri: 'Profile', navKontak: 'Contact',
+    navBeranda: 'Home', navSkills: 'Skills', navPengalaman: 'Experience', navDataDiri: 'Profile', navKontak: 'Contact', navKarya: 'Works',
     keBeranda: 'Back to home',
     temaKeGelap: 'Switch to dark theme', temaKeTerang: 'Switch to light theme',
     bukaMenu: 'Open menu', tutupMenu: 'Close menu',
@@ -82,7 +92,17 @@ const TEKS = {
     judulHalaman: (n) => `${n} | Portfolio`,
     deskripsi: (n) => `Personal portfolio of ${n} — profile, skills, experience, and contact.`,
     altFoto: (n) => `Photo of ${n}`,
-    dd: { nama: 'Full Name', ttl: 'Place, Date of Birth', jk: 'Gender', hobi: 'Hobbies', alamat: 'Location', pendidikan: 'Education', ipk: 'GPA', email: 'Email' }
+    dd: { nama: 'Full Name', ttl: 'Place, Date of Birth', jk: 'Gender', hobi: 'Hobbies', alamat: 'Location', pendidikan: 'Education', ipk: 'GPA', email: 'Email' },
+    karyaKicker: 'Portfolio', karyaJudul: 'My Works',
+    karyaSub: 'A collection of things I have made, from logo design and graphic design to interface and website design.',
+    lihatKarya: 'See my works',
+    filterLabel: 'Filter by category', semua: 'All',
+    kategori: { logo: 'Logo Design', grafis: 'Graphic Design', uiux: 'UI/UX', web: 'Website', video: 'Video', lainnya: 'Others' },
+    kosong: 'Works will be added soon. Stay tuned!',
+    lihatDetail: 'View details', tutup: 'Close', sebelumnya: 'Previous work', berikutnya: 'Next work',
+    kunjungi: 'View project', alat: 'Tools', contoh: 'Sample',
+    judulHalamanKarya: (n) => `Works | ${n}`,
+    deskripsiKarya: (n) => `A collection of works by ${n}: logo design, graphic design, UI/UX, and websites.`,
   }
 };
 
@@ -275,7 +295,7 @@ function initNavigasi() {
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') tutupMenu(); });
   document.addEventListener('click', (e) => { if (!nav.contains(e.target)) tutupMenu(); });
   // Menu otomatis tertutup jika layar diperlebar (mis. tablet diputar)
-  window.matchMedia('(min-width: 761px)').addEventListener('change', (e) => { if (e.matches) tutupMenu(); });
+  window.matchMedia('(min-width: 901px)').addEventListener('change', (e) => { if (e.matches) tutupMenu(); });
 
   // Bayangan navbar, bilah progres, dan tombol ke atas
   let menunggu = false;
@@ -306,8 +326,11 @@ function initNavigasi() {
   const pengamat = new IntersectionObserver((entri) => {
     entri.forEach((e) => { if (e.isIntersecting) tandaiAktif(e.target.id); });
   }, { rootMargin: '-45% 0px -50% 0px' });
+  // Hanya tautan ke bagian di halaman ini (href diawali "#") yang dipantau
   tautan
-    .map((link) => document.querySelector(link.getAttribute('href')))
+    .map((link) => link.getAttribute('href'))
+    .filter((href) => href && href.startsWith('#') && href.length > 1)
+    .map((href) => document.getElementById(href.slice(1)))
     .filter(Boolean)
     .forEach((el) => pengamat.observe(el));
 }
@@ -566,12 +589,14 @@ function renderData() {
     panggilan.hidden = !d.panggilan;
   }
   document.querySelectorAll('[data-nama]').forEach((el) => { el.textContent = d.nama; });
-  document.title = t('judulHalaman')(d.nama);
+  const diKarya = document.body.dataset.halaman === 'karya';
+  document.title = diKarya ? t('judulHalamanKarya')(d.nama) : t('judulHalaman')(d.nama);
   const meta = document.querySelector('meta[name="description"]');
-  if (meta) meta.setAttribute('content', t('deskripsi')(d.nama));
+  if (meta) meta.setAttribute('content', diKarya ? t('deskripsiKarya')(d.nama) : t('deskripsi')(d.nama));
   isiTeks('isiBio', pilih(d.bio));
   isiTeks('isiPenutup', pilih(d.penutup));
-  if (SAPAAN[0] && !document.getElementById('judulHello').dataset.diganti) isiTeks('judulHello', SAPAAN[0]);
+  const elHello = document.getElementById('judulHello');
+  if (elHello && SAPAAN[0] && !elHello.dataset.diganti) elHello.textContent = SAPAAN[0];
 
   // Foto
   const bingkai = document.querySelector('[data-avatar]');
@@ -711,6 +736,166 @@ function renderData() {
   }
 }
 
+/* ---------- Halaman Karya ---------- */
+/*
+ * Data diambil dari bagian "karya" di js/data.js.
+ * Karya bertanda "contoh": true hanya tampil saat dibuka di laptop sendiri
+ * (localhost), jadi pengunjung tidak melihat karya contoh.
+ */
+const KATEGORI_KARYA = ['logo', 'grafis', 'uiux', 'web', 'video', 'lainnya'];
+const IKON_KATEGORI = { logo: 'pen', grafis: 'image', uiux: 'layout', web: 'code', video: 'play', lainnya: 'star' };
+const DI_LAPTOP = ['localhost', '127.0.0.1', '::1', ''].includes(location.hostname);
+
+let filterKarya = 'semua';
+let daftarTampil = [];      // karya yang sedang terlihat (setelah filter)
+let indeksDetail = -1;      // karya yang sedang dibuka di pop-up
+
+function semuaKarya() {
+  return (Array.isArray(DATA.karya) ? DATA.karya : [])
+    .filter((k) => k && pilih(k.judul))
+    .filter((k) => !k.contoh || DI_LAPTOP)
+    .map((k) => ({ ...k, kategori: KATEGORI_KARYA.includes(k.kategori) ? k.kategori : 'lainnya' }));
+}
+
+/** Gambar karya, atau sampul berwarna berisi ikon kategori jika belum ada gambar. */
+function mediaKarya(k, kelas) {
+  const wadah = buat('div', `${kelas} warna-${k.kategori}`);
+  const sampul = buat('div', 'karya-sampul');
+  sampul.append(ikon(IKON_KATEGORI[k.kategori], 'ic karya-sampul-ikon'));
+  wadah.append(sampul);
+  if (k.gambar) {
+    const img = new Image();
+    img.alt = pilih(k.judul);
+    img.loading = 'lazy';
+    img.decoding = 'async';
+    img.onload = () => { sampul.hidden = true; };
+    img.onerror = () => img.remove();          // file belum ada → tetap pakai sampul
+    img.src = k.gambar;
+    wadah.append(img);
+  }
+  return wadah;
+}
+
+function renderFilterKarya(list) {
+  const wadah = document.getElementById('filterKarya');
+  if (!wadah) return;
+  const jumlah = {};
+  list.forEach((k) => { jumlah[k.kategori] = (jumlah[k.kategori] || 0) + 1; });
+  const pilihan = ['semua', ...KATEGORI_KARYA.filter((c) => jumlah[c])];
+  if (!pilihan.includes(filterKarya)) filterKarya = 'semua';
+
+  wadah.replaceChildren(...pilihan.map((c) => {
+    const b = buat('button', 'chip-filter');
+    b.type = 'button';
+    b.dataset.kategori = c;
+    b.setAttribute('aria-pressed', String(c === filterKarya));
+    b.append(buat('span', '', c === 'semua' ? t('semua') : t('kategori')[c]));
+    b.append(buat('span', 'chip-jumlah', String(c === 'semua' ? list.length : jumlah[c])));
+    return b;
+  }));
+  wadah.setAttribute('aria-label', t('filterLabel'));
+  wadah.hidden = list.length === 0;
+}
+
+function renderKarya() {
+  const grid = document.getElementById('isiKarya');
+  if (!grid) return;
+  const list = semuaKarya();
+  renderFilterKarya(list);
+
+  daftarTampil = list.filter((k) => filterKarya === 'semua' || k.kategori === filterKarya);
+  grid.replaceChildren(...daftarTampil.map((k, i) => {
+    const kartu = buat('button', 'karya-card');
+    kartu.type = 'button';
+    kartu.dataset.indeks = String(i);
+    kartu.setAttribute('aria-label', `${pilih(k.judul)} — ${t('lihatDetail')}`);
+    kartu.style.setProperty('--d', String(i % 6));
+
+    const info = buat('div', 'karya-info');
+    const meta = buat('span', 'karya-meta', [t('kategori')[k.kategori], k.tahun].filter(Boolean).join(' · '));
+    info.append(meta, buat('span', 'karya-judul', pilih(k.judul)));
+    if (k.contoh) kartu.append(buat('span', 'badge-contoh', t('contoh')));
+    kartu.append(mediaKarya(k, 'karya-media'), info);
+    return kartu;
+  }));
+
+  const kosong = document.getElementById('karyaKosong');
+  if (kosong) kosong.hidden = list.length > 0;
+}
+
+function bukaDetailKarya(i) {
+  const dialog = document.getElementById('dialogKarya');
+  const k = daftarTampil[i];
+  if (!dialog || !k) return;
+  indeksDetail = i;
+
+  document.getElementById('detailMedia').replaceChildren(mediaKarya(k, 'detail-media-isi'));
+  document.getElementById('detailMeta').textContent = [t('kategori')[k.kategori], k.tahun].filter(Boolean).join(' · ');
+  document.getElementById('detailJudul').textContent = pilih(k.judul);
+  const desk = document.getElementById('detailDeskripsi');
+  desk.textContent = pilih(k.deskripsi);
+  desk.hidden = !pilih(k.deskripsi);
+
+  const alat = document.getElementById('detailAlat');
+  alat.replaceChildren();
+  if (k.alat) {
+    alat.append(buat('span', 'detail-label', `${t('alat')}:`));
+    String(k.alat).split(',').map((x) => x.trim()).filter(Boolean)
+      .forEach((a) => alat.append(buat('span', 'chip-alat', a)));
+  }
+  alat.hidden = !k.alat;
+
+  const link = document.getElementById('detailLink');
+  link.hidden = !k.link;
+  if (k.link) link.href = k.link;
+
+  const banyak = daftarTampil.length > 1;
+  document.getElementById('detailPrev').hidden = !banyak;
+  document.getElementById('detailNext').hidden = !banyak;
+
+  if (!dialog.open) {
+    if (typeof dialog.showModal === 'function') dialog.showModal();
+    else dialog.setAttribute('open', '');
+  }
+}
+
+function initKarya() {
+  const grid = document.getElementById('isiKarya');
+  if (!grid) return;
+  const dialog = document.getElementById('dialogKarya');
+  const tutup = () => { if (dialog.open && typeof dialog.close === 'function') dialog.close(); else dialog.removeAttribute('open'); };
+  const geser = (arah) => bukaDetailKarya((indeksDetail + arah + daftarTampil.length) % daftarTampil.length);
+
+  renderKarya();
+
+  document.getElementById('filterKarya').addEventListener('click', (e) => {
+    const b = e.target.closest('.chip-filter');
+    if (!b) return;
+    filterKarya = b.dataset.kategori;
+    renderKarya();
+  });
+
+  grid.addEventListener('click', (e) => {
+    const kartu = e.target.closest('.karya-card');
+    if (kartu) bukaDetailKarya(Number(kartu.dataset.indeks));
+  });
+
+  document.getElementById('detailTutup').addEventListener('click', tutup);
+  document.getElementById('detailPrev').addEventListener('click', () => geser(-1));
+  document.getElementById('detailNext').addEventListener('click', () => geser(1));
+  dialog.addEventListener('click', (e) => { if (e.target === dialog) tutup(); });
+  dialog.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' && daftarTampil.length > 1) geser(1);
+    if (e.key === 'ArrowLeft' && daftarTampil.length > 1) geser(-1);
+  });
+
+  // Ganti bahasa: tulis ulang kartu & isi pop-up yang sedang terbuka
+  document.addEventListener('gantibahasa', () => {
+    renderKarya();
+    if (dialog.open && indeksDetail >= 0) bukaDetailKarya(indeksDetail);
+  });
+}
+
 /* ---------- Jalankan semua ---------- */
 document.addEventListener('DOMContentLoaded', () => {
   terapkanTeksAntarmuka();
@@ -726,6 +911,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initSalin();
   initPesan();
   initFoto();
+  initKarya();
 
   const tahun = document.getElementById('tahun');
   if (tahun) tahun.textContent = new Date().getFullYear();

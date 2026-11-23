@@ -63,6 +63,53 @@ window.DATA_PORTOFOLIO = {
       "detail": [{ "id": "HIMATIKOM: Himpunan Mahasiswa Teknologi Informasi dan Komputer.", "en": "HIMATIKOM: Information Technology and Computer Student Association." }]
     }
   ],
+  /* Karya untuk halaman karya.html.
+     - kategori: "logo", "grafis", "uiux", "web", "video", atau "lainnya"
+     - gambar  : taruh file di folder asset/karya/ (kosongkan jika belum ada → tampil sampul berwarna)
+     - link    : tautan ke Behance/Drive/website (opsional)
+     - "contoh": true → hanya tampil di laptop sendiri (localhost). Hapus contoh setelah karya asli diisi. */
+  "karya": [
+    {
+      "judul": { "id": "Contoh: Desain Logo", "en": "Sample: Logo Design" },
+      "kategori": "logo",
+      "tahun": "2025",
+      "gambar": "",
+      "deskripsi": { "id": "Ganti dengan cerita singkat: untuk siapa logo ini dibuat, konsepnya, dan arti warna/bentuknya.", "en": "Replace with a short story: who the logo is for, the concept, and the meaning of its colors and shapes." },
+      "alat": "Adobe Illustrator",
+      "link": "",
+      "contoh": true
+    },
+    {
+      "judul": { "id": "Contoh: Poster Acara", "en": "Sample: Event Poster" },
+      "kategori": "grafis",
+      "tahun": "2024",
+      "gambar": "",
+      "deskripsi": { "id": "Contoh poster publikasi acara organisasi.", "en": "A sample publication poster for an organization event." },
+      "alat": "Canva, Adobe Photoshop",
+      "link": "",
+      "contoh": true
+    },
+    {
+      "judul": { "id": "Contoh: Desain UI Aplikasi", "en": "Sample: App UI Design" },
+      "kategori": "uiux",
+      "tahun": "2025",
+      "gambar": "",
+      "deskripsi": { "id": "Contoh rancangan tampilan aplikasi di Figma.", "en": "A sample app interface design made in Figma." },
+      "alat": "Figma",
+      "link": "",
+      "contoh": true
+    },
+    {
+      "judul": { "id": "Contoh: Website Portofolio", "en": "Sample: Portfolio Website" },
+      "kategori": "web",
+      "tahun": "2026",
+      "gambar": "",
+      "deskripsi": { "id": "Contoh website yang dibuat dengan HTML, CSS, dan JavaScript.", "en": "A sample website built with HTML, CSS, and JavaScript." },
+      "alat": "HTML, CSS, JavaScript",
+      "link": "",
+      "contoh": true
+    }
+  ],
   "kontak": {
     "telepon": "",
     "whatsapp": "",

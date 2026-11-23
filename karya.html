@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Kumpulan hasil karya Siti Agniatul Rohmah: desain logo, desain grafis, UI/UX, dan website.">
+  <meta name="theme-color" content="#efefef">
+  <title>Karya | Siti Agniatul Rohmah</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%232d3038'/%3E%3Ctext x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial' font-weight='700' font-size='26' fill='white'%3ES%3C/text%3E%3C/svg%3E">
+
+  <!-- Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- Terapkan tema tersimpan sebelum halaman tampil (mencegah layar berkedip) -->
+  <script>
+    document.documentElement.classList.add('js');
+    try {
+      var tema = localStorage.getItem('portofolio_tema');
+      if (tema === 'dark' || tema === 'light') document.documentElement.setAttribute('data-theme', tema);
+    } catch (e) {}
+  </script>
+</head>
+<body data-halaman="karya">
+
+  <!-- ===== Kumpulan ikon ===== -->
+  <svg xmlns="http://www.w3.org/2000/svg" width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></symbol>
+    <symbol id="i-up" viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></symbol>
+    <symbol id="i-left" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></symbol>
+    <symbol id="i-right" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></symbol>
+    <symbol id="i-external" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></symbol>
+    <!-- Ikon kategori karya -->
+    <symbol id="i-pen" viewBox="0 0 24 24"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></symbol>
+    <symbol id="i-image" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></symbol>
+    <symbol id="i-layout" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></symbol>
+    <symbol id="i-code" viewBox="0 0 24 24"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M10 8l6 4-6 4V8z"/></symbol>
+    <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></symbol>
+  </svg>
+
+  <a href="#konten" class="skip-link" data-i18n="skip">Lewati ke konten utama</a>
+
+  <!-- Bilah kemajuan scroll -->
+  <div class="progress" id="progress" aria-hidden="true"></div>
+
+  <!-- ===================== NAVBAR ===================== -->
+  <header class="nav" id="nav">
+    <div class="nav-inner">
+      <nav class="nav-menu" id="navMenu" aria-label="Navigasi utama" data-i18n-aria-label="navUtama">
+        <a href="index.html#beranda" class="nav-link" data-i18n="navBeranda">Beranda</a>
+        <a href="index.html#skills" class="nav-link" data-i18n="navSkills">Keahlian</a>
+        <a href="index.html#pengalaman" class="nav-link" data-i18n="navPengalaman">Pengalaman</a>
+        <a href="karya.html" class="nav-link active" aria-current="page" data-i18n="navKarya">Karya</a>
+        <a href="index.html#identitas" class="nav-link" data-i18n="navDataDiri">Data Diri</a>
+        <a href="index.html#pesan" class="nav-link" data-i18n="navKontak">Kontak</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button type="button" class="lang-toggle" id="langToggle" aria-label="Switch to English">
+          <span data-lang="id">ID</span><span data-lang="en">EN</span>
+        </button>
+        <button type="button" class="icon-btn theme-toggle" id="themeToggle" aria-label="Ganti tema">
+          <svg class="ic ic-moon" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>
+          <svg class="ic ic-sun" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg>
+        </button>
+        <button type="button" class="icon-btn hamburger" id="hamburger" aria-label="Buka menu" aria-expanded="false" aria-controls="navMenu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="page" id="konten">
+
+    <!-- ===================== JUDUL HALAMAN ===================== -->
+    <section class="works-head" id="atas" aria-labelledby="judulKarya">
+      <p class="works-kicker reveal" data-i18n="karyaKicker">Hasil Karya</p>
+      <h1 class="works-title reveal" id="judulKarya" data-i18n="karyaJudul" style="--d: 1">Karya Saya</h1>
+      <p class="works-sub reveal" data-i18n="karyaSub" style="--d: 2">Kumpulan hasil karya saya, mulai dari desain logo, desain grafis, hingga desain antarmuka dan website.</p>
+    </section>
+
+    <!-- ===================== DAFTAR KARYA ===================== -->
+    <!-- Isi karya diambil dari js/data.js (bagian "karya") -->
+    <section class="works" aria-labelledby="judulKarya">
+      <div class="filter-bar" id="filterKarya" role="group" aria-label="Saring berdasarkan kategori"></div>
+      <div class="works-grid" id="isiKarya"></div>
+      <p class="works-empty" id="karyaKosong" data-i18n="kosong" hidden>Karya akan segera ditambahkan. Nantikan, ya!</p>
+    </section>
+
+  </main>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer class="footer">
+    <p>&copy; <span id="tahun">2026</span> <span data-nama>Siti Agniatul Rohmah</span></p>
+    <a href="#atas" class="to-top">
+      <span data-i18n="keAtas">Kembali ke atas</span>
+      <svg class="ic" aria-hidden="true" focusable="false"><use href="#i-up"/></svg>
+    </a>
+  </footer>
+
+  <!-- Tombol melayang kembali ke atas -->
+  <a href="#atas" class="float-top" id="floatTop" aria-label="Kembali ke atas" data-i18n-aria-label="keAtas">
+    <svg class="ic" aria-hidden="true" focusable="false"><use href="#i-up"/></svg>
+  </a>
+
+  <!-- ===================== POP-UP DETAIL KARYA ===================== -->
+  <dialog class="work-dialog" id="dialogKarya" aria-labelledby="detailJudul">
+    <div class="work-dialog-body">
+      <div class="detail-media" id="detailMedia"></div>
+      <div class="detail-info">
+        <p class="detail-meta" id="detailMeta"></p>
+        <h2 class="detail-judul" id="detailJudul"></h2>
+        <p class="detail-deskripsi" id="detailDeskripsi"></p>
+        <div class="detail-alat" id="detailAlat"></div>
+        <a class="btn btn-dark" id="detailLink" href="#" target="_blank" rel="noopener" hidden>
+          <span data-i18n="kunjungi">Lihat karya</span>
+          <svg class="ic" aria-hidden="true" focusable="false"><use href="#i-external"/></svg>
+        </a>
+      </div>
+    </div>
+    <button type="button" class="dialog-btn dialog-close" id="detailTutup" aria-label="Tutup" data-i18n-aria-label="tutup">
+      <svg class="ic" aria-hidden="true" focusable="false"><use href="#i-x"/></svg>
+    </button>
+    <button type="button" class="dialog-btn dialog-prev" id="detailPrev" aria-label="Karya sebelumnya" data-i18n-aria-label="sebelumnya">
+      <svg class="ic" aria-hidden="true" focusable="false"><use href="#i-left"/></svg>
+    </button>
+    <button type="button" class="dialog-btn dialog-next" id="detailNext" aria-label="Karya berikutnya" data-i18n-aria-label="berikutnya">
+      <svg class="ic" aria-hidden="true" focusable="false"><use href="#i-right"/></svg>
+    </button>
+  </dialog>
+
+  <!-- Notifikasi kecil -->
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <!-- Isi portofolio (ubah lewat isi-data.html atau langsung di VS Code) -->
+  <script src="js/data.js"></script>
+  <script src="js/script.js"></script>
+</body>
+</html>
