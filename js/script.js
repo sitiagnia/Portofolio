@@ -11,7 +11,8 @@
    - Stiker: klik untuk ganti sapaan, mata mengikuti kursor
    - Skills: klik ubin untuk melihat level & keterangan
    - Foto miring 3D mengikuti kursor (desktop)
-   - Salin nomor / email, form kirim pesan via WhatsApp / email
+   - Salin nomor / email, tautan kontak (email, WhatsApp, LinkedIn, GitHub, Instagram)
+   - Bagian Karya: filter kategori, kartu, pop-up detail
    - Dua bahasa: Indonesia & Inggris (tombol ID | EN)
    ========================================================= */
 'use strict';
@@ -34,21 +35,12 @@ const TEKS = {
     gantiBahasa: 'Switch to English',
     sapaanLabel: 'Ganti sapaan', sapaanTitle: 'Klik aku!',
     judulSkills: 'Keahlian', judulPendidikan: 'Pendidikan', judulPengalaman: 'Pengalaman',
-    judulDataDiri: 'Data Diri', judulPesan: 'Kirim Pesan',
+    judulDataDiri: 'Data Diri',
     pilihSkill: 'Pilih keahlian untuk melihat detail',
     kontak: 'Kontak',
-    introPesan: (jalur) => `Ada pertanyaan atau tawaran kerja sama? Tulis pesanmu, lalu kirim lewat ${jalur}.`,
-    atau: ' atau ', kontakDiAtas: 'kontak di atas',
-    labelNama: 'Nama', labelPesan: 'Pesan',
-    phNama: 'Nama kamu', phPesan: 'Tulis pesanmu di sini…',
-    kirimWa: 'Kirim via WhatsApp', kirimEmail: 'Kirim via Email',
     keAtas: 'Kembali ke atas',
     salin: 'Salin', salinTelepon: 'Salin nomor telepon', salinEmail: 'Salin alamat email',
     disalin: 'Disalin', gagalSalin: 'Gagal menyalin',
-    errNama: 'Nama belum diisi.', errPesan: 'Pesan terlalu pendek (minimal 5 karakter).',
-    errEmail: 'Email tujuan belum diatur.', errWa: 'Nomor WhatsApp tujuan belum diatur.',
-    sapaPesan: (n) => `Halo, saya ${n}.`, subjek: (n) => `Pesan dari ${n} (portofolio)`,
-    bukaEmail: 'Membuka aplikasi email…', bukaWa: 'Membuka WhatsApp…',
     judulHalaman: (n) => `${n} | Portofolio`,
     deskripsi: (n) => `Portofolio pribadi ${n} — profil, keahlian, pengalaman, dan kontak.`,
     altFoto: (n) => `Foto ${n}`,
@@ -61,8 +53,6 @@ const TEKS = {
     kosong: 'Karya akan segera ditambahkan. Nantikan, ya!',
     lihatDetail: 'Lihat detail', tutup: 'Tutup', sebelumnya: 'Karya sebelumnya', berikutnya: 'Karya berikutnya',
     kunjungi: 'Lihat karya', alat: 'Alat', contoh: 'Contoh',
-    judulHalamanKarya: (n) => `Karya | ${n}`,
-    deskripsiKarya: (n) => `Kumpulan hasil karya ${n}: desain logo, desain grafis, UI/UX, dan website.`,
   },
   en: {
     skip: 'Skip to main content',
@@ -74,21 +64,12 @@ const TEKS = {
     gantiBahasa: 'Ganti ke Bahasa Indonesia',
     sapaanLabel: 'Change greeting', sapaanTitle: 'Click me!',
     judulSkills: 'Skills', judulPendidikan: 'Education', judulPengalaman: 'Experience',
-    judulDataDiri: 'Profile', judulPesan: 'Send a Message',
+    judulDataDiri: 'Profile',
     pilihSkill: 'Choose a skill to see details',
     kontak: 'Contact',
-    introPesan: (jalur) => `Have a question or a collaboration offer? Write your message and send it via ${jalur}.`,
-    atau: ' or ', kontakDiAtas: 'the contacts above',
-    labelNama: 'Name', labelPesan: 'Message',
-    phNama: 'Your name', phPesan: 'Write your message here…',
-    kirimWa: 'Send via WhatsApp', kirimEmail: 'Send via Email',
     keAtas: 'Back to top',
     salin: 'Copy', salinTelepon: 'Copy phone number', salinEmail: 'Copy email address',
     disalin: 'Copied', gagalSalin: 'Copy failed',
-    errNama: 'Please enter your name.', errPesan: 'Message is too short (at least 5 characters).',
-    errEmail: 'Destination email is not set.', errWa: 'Destination WhatsApp number is not set.',
-    sapaPesan: (n) => `Hi, I'm ${n}.`, subjek: (n) => `Message from ${n} (portfolio)`,
-    bukaEmail: 'Opening your email app…', bukaWa: 'Opening WhatsApp…',
     judulHalaman: (n) => `${n} | Portfolio`,
     deskripsi: (n) => `Personal portfolio of ${n} — profile, skills, experience, and contact.`,
     altFoto: (n) => `Photo of ${n}`,
@@ -101,8 +82,6 @@ const TEKS = {
     kosong: 'Works will be added soon. Stay tuned!',
     lihatDetail: 'View details', tutup: 'Close', sebelumnya: 'Previous work', berikutnya: 'Next work',
     kunjungi: 'View project', alat: 'Tools', contoh: 'Sample',
-    judulHalamanKarya: (n) => `Works | ${n}`,
-    deskripsiKarya: (n) => `A collection of works by ${n}: logo design, graphic design, UI/UX, and websites.`,
   }
 };
 
@@ -482,54 +461,6 @@ function initSalin() {
   });
 }
 
-/* ---------- Form kirim pesan (WhatsApp / email) ---------- */
-function initPesan() {
-  const form = document.getElementById('formPesan');
-  if (!form) return;
-  const nama = document.getElementById('pesanNama');
-  const isi = document.getElementById('pesanIsi');
-  const hitung = document.getElementById('charCount');
-  const pesan = document.getElementById('pesanMsg');
-  const batas = Number(isi.getAttribute('maxlength')) || 500;
-
-  const tulis = (teks, tipe = '') => {
-    pesan.textContent = teks;
-    pesan.className = tipe ? `form-msg is-${tipe}` : 'form-msg';
-  };
-
-  isi.addEventListener('input', () => { hitung.textContent = `${isi.value.length}/${batas}`; });
-  [nama, isi].forEach((el) => el.addEventListener('input', () => el.parentElement.classList.remove('invalid')));
-
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const via = (e.submitter && e.submitter.dataset.via) || 'wa';
-    const n = nama.value.trim();
-    const p = isi.value.trim();
-
-    nama.parentElement.classList.toggle('invalid', !n);
-    isi.parentElement.classList.toggle('invalid', p.length < 5);
-    if (!n) { tulis(t('errNama'), 'error'); nama.focus(); return; }
-    if (p.length < 5) { tulis(t('errPesan'), 'error'); isi.focus(); return; }
-
-    if (via === 'email' && !form.dataset.email) { tulis(t('errEmail'), 'error'); return; }
-    if (via !== 'email' && !form.dataset.wa) { tulis(t('errWa'), 'error'); return; }
-
-    const teks = `${t('sapaPesan')(n)}\n\n${p}`;
-    let url;
-    if (via === 'email') {
-      const subjek = encodeURIComponent(t('subjek')(n));
-      url = `mailto:${form.dataset.email}?subject=${subjek}&body=${encodeURIComponent(teks)}`;
-      window.location.href = url;
-    } else {
-      url = `https://wa.me/${form.dataset.wa}?text=${encodeURIComponent(teks)}`;
-      window.open(url, '_blank', 'noopener');
-    }
-    tulis(via === 'email' ? t('bukaEmail') : t('bukaWa'), 'success');
-  });
-  // Bersihkan pesan status lama saat bahasa diganti
-  document.addEventListener('gantibahasa', () => tulis(''));
-}
-
 /* ---------- Isi halaman dari js/data.js ---------- */
 /* Semua teks dimasukkan lewat textContent, jadi aman dari kode HTML yang tidak sengaja ikut terketik. */
 function buat(tag, kelas, teks) {
@@ -589,10 +520,9 @@ function renderData() {
     panggilan.hidden = !d.panggilan;
   }
   document.querySelectorAll('[data-nama]').forEach((el) => { el.textContent = d.nama; });
-  const diKarya = document.body.dataset.halaman === 'karya';
-  document.title = diKarya ? t('judulHalamanKarya')(d.nama) : t('judulHalaman')(d.nama);
+  document.title = t('judulHalaman')(d.nama);
   const meta = document.querySelector('meta[name="description"]');
-  if (meta) meta.setAttribute('content', diKarya ? t('deskripsiKarya')(d.nama) : t('deskripsi')(d.nama));
+  if (meta) meta.setAttribute('content', t('deskripsi')(d.nama));
   isiTeks('isiBio', pilih(d.bio));
   isiTeks('isiPenutup', pilih(d.penutup));
   const elHello = document.getElementById('judulHello');
@@ -676,6 +606,7 @@ function renderData() {
 
     if (k.telepon) tambah(`tel:${angka(k.telepon)}`, 'phone', k.telepon, angka(k.telepon), t('salinTelepon'));
     if (k.email) tambah(`mailto:${k.email}`, 'mail', k.email, k.email, t('salinEmail'));
+    if (k.whatsapp) tambah(`https://wa.me/${String(k.whatsapp).replace(/\D/g, '')}`, 'chat', 'WhatsApp', null, '', true);
     if (k.linkedin) {
       const u = namaPengguna(k.linkedin).replace(/^in\//i, '');
       tambah(`https://www.linkedin.com/in/${u}/`, 'linkedin', `in/${u}`, null, '', true);
@@ -690,24 +621,6 @@ function renderData() {
     }
     wadahKontak.replaceChildren(...baris);
     wadahKontak.hidden = baris.length === 0;
-  }
-
-  // Tujuan form pesan
-  const formPesan = document.getElementById('formPesan');
-  if (formPesan) {
-    formPesan.dataset.wa = String(k.whatsapp || '').replace(/\D/g, '');
-    formPesan.dataset.email = k.email || '';
-    // Sembunyikan tombol kirim yang tujuannya belum diatur
-    const btnWa = formPesan.querySelector('[data-via="wa"]');
-    const btnEmail = formPesan.querySelector('[data-via="email"]');
-    if (btnWa) btnWa.hidden = !formPesan.dataset.wa;
-    if (btnEmail) btnEmail.hidden = !formPesan.dataset.email;
-    const intro = document.getElementById('introPesan');
-    if (intro) {
-      const jalur = [formPesan.dataset.wa && 'WhatsApp', formPesan.dataset.email && 'email'].filter(Boolean).join(t('atau'));
-      intro.textContent = t('introPesan')(jalur || t('kontakDiAtas'));
-    }
-    document.getElementById('pesan').hidden = !formPesan.dataset.wa && !formPesan.dataset.email;
   }
 
   // Data diri
@@ -909,7 +822,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initSkills();
   initTilt();
   initSalin();
-  initPesan();
   initFoto();
   initKarya();
 

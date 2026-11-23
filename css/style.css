@@ -550,61 +550,6 @@ section[id],
   overflow-wrap: anywhere;
 }
 
-/* ---------- 6. Kirim pesan ---------- */
-.message {
-  display: grid;
-  grid-template-columns: 0.8fr 1.2fr;
-  gap: clamp(32px, 5vw, 84px);
-  align-items: start;
-  padding: clamp(56px, 8vw, 110px) 0;
-  border-top: 1px solid var(--line);
-}
-.message-intro p {
-  max-width: 420px;
-  font-size: clamp(1.05rem, 1.4vw, 1.25rem);
-  color: var(--ink-soft);
-}
-
-.message-form {
-  padding: clamp(22px, 3.5vw, 36px);
-  border-radius: 28px;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  box-shadow: var(--shadow);
-}
-.field { position: relative; }
-.field + .field { margin-top: 18px; }
-.field label { display: block; margin-bottom: 6px; font-weight: 600; }
-.field input,
-.field textarea {
-  width: 100%;
-  padding: 13px 16px;
-  border-radius: 14px;
-  border: 1.5px solid var(--line);
-  background: var(--bg);
-  font-size: 1rem;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-.field textarea { resize: vertical; min-height: 130px; }
-.field input::placeholder,
-.field textarea::placeholder { color: var(--muted); }
-.field input:focus,
-.field textarea:focus {
-  outline: none;
-  border-color: var(--ink);
-  box-shadow: 0 0 0 4px rgba(224, 87, 79, 0.18);
-}
-.field.invalid input,
-.field.invalid textarea { border-color: var(--danger); }
-.char-count {
-  position: absolute;
-  right: 12px;
-  bottom: 10px;
-  font-size: 0.78rem;
-  color: var(--muted);
-  pointer-events: none;
-}
-
 /* ---------- 7. Footer & tombol ke atas ---------- */
 .footer {
   display: flex;
@@ -733,8 +678,6 @@ section[id],
   .photo-frame { min-height: 480px; }
   .contact { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .profile-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .message { grid-template-columns: 1fr; }
-  .message-intro p { max-width: 560px; }
 }
 
 /* Tablet & HP (≤ 900px): menu jadi tombol hamburger */
@@ -799,7 +742,7 @@ section[id],
 
 
 /* =========================================================
-   HALAMAN KARYA (karya.html)
+   BAGIAN KARYA (#karya di index.html)
    ========================================================= */
 
 /* Tombol "Lihat karya saya" di bawah perkenalan */
@@ -807,32 +750,17 @@ section[id],
 .hello-cta .ic { transition: transform 0.2s ease; }
 .hello-cta:hover .ic { transform: translateX(4px); }
 
-/* Judul halaman */
-.works-head {
-  padding: calc(var(--nav-h) + clamp(32px, 6vw, 80px)) 0 clamp(28px, 4vw, 48px);
-  max-width: 820px;
+/* Bagian Karya di halaman utama */
+.works-section {
+  padding: clamp(56px, 8vw, 110px) 0;
+  border-top: 1px solid var(--line);
 }
-.works-kicker {
-  font-size: 0.85rem;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--accent);
-}
-.works-title {
-  margin-top: 10px;
-  font-size: clamp(3rem, 7vw, 6rem);
-  font-weight: 800;
-  line-height: 0.95;
-  letter-spacing: -0.03em;
-}
+.works-intro { max-width: 720px; margin-bottom: clamp(22px, 3vw, 32px); }
+.works-intro .block-title { margin-bottom: 14px; }
 .works-sub {
-  margin-top: clamp(16px, 2vw, 24px);
-  font-size: clamp(1.05rem, 1.5vw, 1.3rem);
+  font-size: clamp(1.05rem, 1.4vw, 1.25rem);
   color: var(--ink-soft);
 }
-
-.works { padding-bottom: clamp(56px, 8vw, 110px); }
 
 /* Filter kategori */
 .filter-bar {

@@ -63,7 +63,7 @@ window.DATA_PORTOFOLIO = {
       "detail": [{ "id": "HIMATIKOM: Himpunan Mahasiswa Teknologi Informasi dan Komputer.", "en": "HIMATIKOM: Information Technology and Computer Student Association." }]
     }
   ],
-  /* Karya untuk halaman karya.html.
+  /* Karya untuk bagian "Karya" di halaman utama.
      - kategori: "logo", "grafis", "uiux", "web", "video", atau "lainnya"
      - gambar  : taruh file di folder asset/karya/ (kosongkan jika belum ada → tampil sampul berwarna)
      - link    : tautan ke Behance/Drive/website (opsional)
