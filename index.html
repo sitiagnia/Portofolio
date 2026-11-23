@@ -5,14 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- GANTI: deskripsi & judul halaman -->
   <meta name="description" content="Portofolio pribadi Siti Agniatul Rohmah — profil, keahlian, pengalaman, dan kontak.">
-  <meta name="theme-color" content="#efefef">
+  <meta name="theme-color" content="#f6efd9">
   <title>Siti Agniatul Rohmah | Portofolio</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23002967'/%3E%3Ctext x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial' font-weight='700' font-size='26' fill='white'%3ES%3C/text%3E%3C/svg%3E">
 
   <!-- Font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="css/style.css">
 
@@ -53,6 +53,10 @@
     <symbol id="i-down" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
     <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></symbol>
     <symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></symbol>
+    <!-- Hiasan (bintang, coretan, kilat) -->
+    <symbol id="d-burst" viewBox="0 0 100 100"><polygon points="100,50 78.98,57.76 93.3,75 71.21,71.21 75,93.3 57.76,78.98 50,100 42.24,78.98 25,93.3 28.79,71.21 6.7,75 21.02,57.76 0,50 21.02,42.24 6.7,25 28.79,28.79 25,6.7 42.24,21.02 50,0 57.76,21.02 75,6.7 71.21,28.79 93.3,25 78.98,42.24"/></symbol>
+    <symbol id="d-squiggle" viewBox="0 0 120 50"><path d="M6 38c10-26 22-30 26-14s-8 22-4 8 18-26 26-10-6 22-2 8 20-28 28-12-4 20 2 8 16-22 26-12" fill="none" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="d-bolt" viewBox="0 0 60 60"><path d="M10 34l10-6M18 16l6 10M36 8l-2 12" fill="none" stroke-width="7" stroke-linecap="round"/></symbol>
   </svg>
 
   <a href="#konten" class="skip-link" data-i18n="skip">Lewati ke konten utama</a>
@@ -63,14 +67,13 @@
   <!-- ===================== NAVBAR ===================== -->
   <header class="nav" id="nav">
     <div class="nav-inner">
-
       <nav class="nav-menu" id="navMenu" aria-label="Navigasi utama" data-i18n-aria-label="navUtama">
         <a href="#beranda" class="nav-link" data-i18n="navBeranda">Beranda</a>
-        <a href="#skills" class="nav-link" data-i18n="navSkills">Keahlian</a>
+        <a href="#tentang" class="nav-link" data-i18n="navTentang">Tentang</a>
         <a href="#pengalaman" class="nav-link" data-i18n="navPengalaman">Pengalaman</a>
+        <a href="#skills" class="nav-link" data-i18n="navSkills">Keahlian</a>
         <a href="#karya" class="nav-link" data-i18n="navKarya">Karya</a>
-        <a href="#identitas" class="nav-link" data-i18n="navDataDiri">Data Diri</a>
-        <a href="#kontak" class="nav-link" data-i18n="navKontak">Kontak</a>
+        <a href="#hubungi" class="nav-link" data-i18n="navKontak">Kontak</a>
       </nav>
 
       <div class="nav-actions">
@@ -88,60 +91,116 @@
     </div>
   </header>
 
-  <main class="page" id="konten">
+  <main id="konten">
 
-    <!-- ===================== LEMBAR PROFIL (HELLO) ===================== -->
-    <section class="about" id="beranda" aria-labelledby="judulHello">
-      <div class="about-grid">
+    <!-- ===================== 1. SAMPUL (krem) ===================== -->
+    <section class="band band-cream cover" id="beranda" aria-labelledby="judulSampul">
+      <svg class="deko deko-squiggle" style="--x: 2%; --y: 14%; --r: -10deg" aria-hidden="true"><use href="#d-squiggle"/></svg>
+      <svg class="deko deko-squiggle" style="--x: 46%; --y: 78%; --r: 30deg" aria-hidden="true"><use href="#d-squiggle"/></svg>
 
-        <!-- Foto: GANTI dengan menaruh file foto di asset/foto.jpg (jika belum ada, tampil inisial nama) -->
-        <figure class="photo reveal" id="photo">
-          <div class="photo-frame" data-avatar data-alt="Foto Siti Agniatul Rohmah" data-default="asset/foto.jpg">
-            <span class="avatar-initials" data-inisial>SA</span>
-          </div>
-        </figure>
+      <div class="wrap cover-grid">
+        <div class="cover-text">
+          <!-- Label nama: diambil dari js/data.js -->
+          <p class="name-tag reveal"><span data-nama>Siti Agniatul Rohmah</span></p>
+          <h1 class="display cover-title reveal" id="judulSampul" style="--d: 1">
+            <span class="line" data-potong data-i18n="sampul1">PORTOFOLIO</span>
+            <span class="line" data-potong data-i18n="sampul2">KREATIF</span>
+          </h1>
+          <p class="cover-tagline reveal" id="isiTagline" style="--d: 2"></p>
+        </div>
 
-        <!-- Sapaan & perkenalan -->
-        <div class="hello reveal" style="--d: 1">
-          <div class="hello-head">
-            <h1 class="hello-title" id="judulHello">Hello!</h1>
-            <!-- Stiker: klik untuk mengganti sapaan -->
-            <button type="button" class="sticker-btn" id="sticker" aria-label="Ganti sapaan" title="Klik aku!" data-i18n-aria-label="sapaanLabel" data-i18n-title="sapaanTitle">
-              <svg class="sticker" viewBox="0 0 120 120" aria-hidden="true" focusable="false">
-                <g fill="#002967">
-                  <circle cx="96" cy="60" r="20"/><circle cx="85.5" cy="85.5" r="20"/>
-                  <circle cx="60" cy="96" r="20"/><circle cx="34.5" cy="85.5" r="20"/>
-                  <circle cx="24" cy="60" r="20"/><circle cx="34.5" cy="34.5" r="20"/>
-                  <circle cx="60" cy="24" r="20"/><circle cx="85.5" cy="34.5" r="20"/>
-                </g>
-                <circle cx="60" cy="60" r="38" fill="#3d6fd6"/>
-                <circle cx="47" cy="55" r="8" fill="#fff"/><circle cx="73" cy="55" r="8" fill="#fff"/>
-                <circle class="pupil" cx="48.5" cy="56.5" r="4" fill="#2d3038"/><circle class="pupil" cx="74.5" cy="56.5" r="4" fill="#2d3038"/>
-                <circle cx="40" cy="70" r="5.5" fill="#ffb8ad"/><circle cx="80" cy="70" r="5.5" fill="#ffb8ad"/>
-                <path d="M52 71q8 8 16 0" fill="none" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round"/>
-              </svg>
-            </button>
-          </div>
+        <div class="cover-art reveal" style="--d: 2">
+          <svg class="deko-burst-besar" aria-hidden="true"><use href="#d-burst"/></svg>
+          <svg class="deko-bolt" aria-hidden="true"><use href="#d-bolt"/></svg>
+          <!-- Stiker: klik untuk mengganti sapaan "Hello!" -->
+          <button type="button" class="sticker-btn" id="sticker" aria-label="Ganti sapaan" title="Klik aku!" data-i18n-aria-label="sapaanLabel" data-i18n-title="sapaanTitle">
+            <svg class="sticker" viewBox="0 0 120 120" aria-hidden="true" focusable="false">
+              <g fill="#002967">
+                <circle cx="96" cy="60" r="20"/><circle cx="85.5" cy="85.5" r="20"/>
+                <circle cx="60" cy="96" r="20"/><circle cx="34.5" cy="85.5" r="20"/>
+                <circle cx="24" cy="60" r="20"/><circle cx="34.5" cy="34.5" r="20"/>
+                <circle cx="60" cy="24" r="20"/><circle cx="85.5" cy="34.5" r="20"/>
+              </g>
+              <circle cx="60" cy="60" r="38" fill="#3d6fd6"/>
+              <circle cx="47" cy="55" r="8" fill="#fff"/><circle cx="73" cy="55" r="8" fill="#fff"/>
+              <circle class="pupil" cx="48.5" cy="56.5" r="4" fill="#2d3038"/><circle class="pupil" cx="74.5" cy="56.5" r="4" fill="#2d3038"/>
+              <circle cx="40" cy="70" r="5.5" fill="#ffb8ad"/><circle cx="80" cy="70" r="5.5" fill="#ffb8ad"/>
+              <path d="M52 71q8 8 16 0" fill="none" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+      </div>
 
-          <!-- Nama panggilan (besar) + nama lengkap, lalu perkenalan. Isinya diambil dari js/data.js -->
-          <div class="name-block">
-            <p class="nickname" id="namaPanggilan">AGNI</p>
-            <p class="fullname" id="namaUtama">Siti Agniatul Rohmah</p>
-          </div>
-          <p class="hello-bio" id="isiBio"></p>
-          <p class="hello-bio" id="isiPenutup"></p>
-          <a href="#karya" class="btn btn-dark hello-cta">
+      <a href="#tentang" class="scroll-hint" aria-label="Gulir ke bawah" data-i18n-aria-label="gulir">
+        <svg class="ic" aria-hidden="true" focusable="false"><use href="#i-down"/></svg>
+      </a>
+    </section>
+
+    <!-- ===================== 2. HELLO, I'M AGNI (biru) ===================== -->
+    <section class="band band-primary hello-band" id="tentang" aria-labelledby="judulHelloBlok">
+      <svg class="deko deko-squiggle" style="--x: 40%; --y: 8%; --r: 4deg" aria-hidden="true"><use href="#d-squiggle"/></svg>
+
+      <div class="wrap hello-grid">
+        <div class="hello-text">
+          <h2 class="display hello-title" id="judulHelloBlok">
+            <span class="line" id="judulHello" data-potong>Hello!</span>
+            <span class="line"><span data-potong data-i18n="aku">AKU</span> <span id="namaPanggilan" data-potong>AGNI</span></span>
+          </h2>
+          <p class="fullname reveal" id="namaUtama">Siti Agniatul Rohmah</p>
+          <p class="hello-bio reveal" id="isiBio"></p>
+          <p class="hello-bio hello-penutup reveal" id="isiPenutup"></p>
+          <a href="#karya" class="btn btn-cream hello-cta reveal">
             <span data-i18n="lihatKarya">Lihat karya saya</span>
             <svg class="ic" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg>
           </a>
         </div>
 
-        <!-- Keahlian: klik ubin untuk melihat detail -->
-        <div class="block skills reveal" id="skills" style="--d: 2">
-          <h2 class="block-title" data-i18n="judulSkills">Keahlian</h2>
-          <!-- Ubin keahlian dibuat dari js/data.js (bagian "skills") -->
-          <div class="skill-grid" id="isiSkills" role="group" aria-label="Pilih keahlian untuk melihat detail" data-i18n-aria-label="pilihSkill"></div>
+        <!-- Foto: GANTI dengan menaruh file foto di asset/foto.jpg (jika belum ada, tampil inisial nama) -->
+        <figure class="photo reveal" id="photo" style="--d: 1">
+          <span class="photo-blob" aria-hidden="true"></span>
+          <div class="photo-frame" data-avatar data-alt="Foto Siti Agniatul Rohmah" data-default="asset/foto.jpg">
+            <span class="avatar-initials" data-inisial>SA</span>
+          </div>
+          <svg class="deko-burst-foto" aria-hidden="true"><use href="#d-burst"/></svg>
+        </figure>
+      </div>
+    </section>
 
+    <!-- ===================== 3. PENDIDIKAN (krem) ===================== -->
+    <section class="band band-cream" id="pendidikan" aria-labelledby="judulPendidikan">
+      <svg class="deko deko-burst-sudut" style="--x: -4%; --y: 6%" aria-hidden="true"><use href="#d-burst"/></svg>
+      <svg class="deko deko-squiggle" style="--x: 84%; --y: 4%; --r: -6deg" aria-hidden="true"><use href="#d-squiggle"/></svg>
+
+      <div class="wrap">
+        <h2 class="display band-title center" id="judulPendidikan"><span data-potong data-i18n="judulPendidikan">PENDIDIKAN</span></h2>
+        <!-- Dibuat dari js/data.js (bagian "pendidikan") -->
+        <div class="edu-grid reveal" id="isiPendidikan"></div>
+      </div>
+
+      <!-- Pita bergerak berisi daftar keahlian (dibuat dari bagian "skills") -->
+      <div class="marquee" aria-hidden="true">
+        <div class="marquee-track" id="marquee"></div>
+      </div>
+    </section>
+
+    <!-- ===================== 4. PENGALAMAN (biru) ===================== -->
+    <section class="band band-primary" id="pengalaman" aria-labelledby="judulPengalaman">
+      <svg class="deko deko-squiggle" style="--x: 78%; --y: 6%; --r: 12deg" aria-hidden="true"><use href="#d-squiggle"/></svg>
+      <div class="wrap">
+        <h2 class="display band-title" id="judulPengalaman"><span data-potong data-i18n="judulPengalaman">PENGALAMAN</span></h2>
+        <!-- Dibuat dari js/data.js (bagian "pengalaman") -->
+        <div class="exp-grid" id="isiPengalaman"></div>
+      </div>
+    </section>
+
+    <!-- ===================== 5. KEAHLIAN (krem) ===================== -->
+    <section class="band band-cream" id="skills" aria-labelledby="judulSkills">
+      <svg class="deko deko-burst-kecil" style="--x: 88%; --y: 10%" aria-hidden="true"><use href="#d-burst"/></svg>
+      <div class="wrap skills-grid">
+        <h2 class="display band-title" id="judulSkills"><span data-potong data-i18n="judulSkills">KEAHLIAN</span></h2>
+        <div class="skills-body reveal">
+          <!-- Ubin keahlian dibuat dari js/data.js (bagian "skills"); klik untuk detail -->
+          <div class="skill-grid" id="isiSkills" role="group" aria-label="Pilih keahlian untuk melihat detail" data-i18n-aria-label="pilihSkill"></div>
           <div class="skill-detail" id="skillDetail" aria-live="polite">
             <div class="skill-detail-head">
               <strong id="skillName"></strong>
@@ -151,56 +210,52 @@
             <p id="skillDesc"></p>
           </div>
         </div>
-
-        <!-- Pendidikan -->
-        <div class="block education reveal" id="pendidikan" style="--d: 3">
-          <h2 class="block-title" data-i18n="judulPendidikan">Pendidikan</h2>
-          <!-- Dibuat dari js/data.js (bagian "pendidikan") -->
-          <div id="isiPendidikan"></div>
-        </div>
-
-        <!-- Pengalaman -->
-        <div class="block experience reveal" id="pengalaman" style="--d: 4">
-          <h2 class="block-title" data-i18n="judulPengalaman">Pengalaman</h2>
-          <!-- Dibuat dari js/data.js (bagian "pengalaman") -->
-          <div id="isiPengalaman"></div>
-        </div>
-
-        <!-- Kontak cepat dibuat dari js/data.js (bagian "kontak"); ikon salin untuk menyalin teks -->
-        <ul class="contact reveal" id="kontak" aria-label="Kontak" data-i18n-aria-label="kontak" style="--d: 5"></ul>
-
       </div>
     </section>
 
-    <!-- ===================== KARYA ===================== -->
+    <!-- ===================== 6. KARYA (biru) ===================== -->
     <!-- Isi karya diambil dari js/data.js (bagian "karya") -->
-    <section class="works-section" id="karya" aria-labelledby="judulKarya">
-      <div class="works-intro reveal">
-        <h2 class="block-title" id="judulKarya" data-i18n="karyaJudul">Karya Saya</h2>
-        <p class="works-sub" data-i18n="karyaSub">Kumpulan hasil karya saya, mulai dari desain logo, desain grafis, hingga desain antarmuka dan website.</p>
+    <section class="band band-primary" id="karya" aria-labelledby="judulKarya">
+      <svg class="deko deko-squiggle" style="--x: 6%; --y: 5%; --r: -14deg" aria-hidden="true"><use href="#d-squiggle"/></svg>
+      <div class="wrap">
+        <div class="works-intro">
+          <h2 class="display band-title" id="judulKarya"><span data-potong data-i18n="karyaJudul">KARYA SAYA</span></h2>
+          <p class="works-sub reveal" data-i18n="karyaSub">Kumpulan hasil karya saya, mulai dari desain logo, desain grafis, hingga desain antarmuka dan website.</p>
+        </div>
+        <div class="filter-bar" id="filterKarya" role="group" aria-label="Saring berdasarkan kategori"></div>
+        <div class="works-grid" id="isiKarya"></div>
+        <p class="works-empty" id="karyaKosong" data-i18n="kosong" hidden>Karya akan segera ditambahkan. Nantikan, ya!</p>
       </div>
-      <div class="filter-bar" id="filterKarya" role="group" aria-label="Saring berdasarkan kategori"></div>
-      <div class="works-grid" id="isiKarya"></div>
-      <p class="works-empty" id="karyaKosong" data-i18n="kosong" hidden>Karya akan segera ditambahkan. Nantikan, ya!</p>
     </section>
 
-    <!-- ===================== DATA DIRI ===================== -->
-    <section class="profile" id="identitas" aria-labelledby="judulDataDiri">
-      <h2 class="block-title reveal" id="judulDataDiri" data-i18n="judulDataDiri">Data Diri</h2>
-      <!-- Dibuat dari js/data.js (nama + bagian "dataDiri") -->
-      <dl class="profile-list reveal" id="isiDataDiri"></dl>
+    <!-- ===================== 7. DATA DIRI & KONTAK (krem) ===================== -->
+    <section class="band band-cream" id="hubungi" aria-labelledby="judulDataDiri">
+      <svg class="deko deko-squiggle" style="--x: 82%; --y: 8%; --r: 20deg" aria-hidden="true"><use href="#d-squiggle"/></svg>
+      <div class="wrap connect-grid">
+        <div id="identitas">
+          <h2 class="display band-title" id="judulDataDiri"><span data-potong data-i18n="judulDataDiri">DATA DIRI</span></h2>
+          <!-- Dibuat dari js/data.js (nama + bagian "dataDiri") -->
+          <dl class="profile-list reveal" id="isiDataDiri"></dl>
+        </div>
+        <div>
+          <h2 class="display band-title"><span data-potong data-i18n="kontak">KONTAK</span></h2>
+          <!-- Dibuat dari js/data.js (bagian "kontak"); ikon salin untuk menyalin teks -->
+          <ul class="contact reveal" id="kontak" aria-label="Kontak" data-i18n-aria-label="kontak"></ul>
+        </div>
+      </div>
     </section>
-
 
   </main>
 
   <!-- ===================== FOOTER ===================== -->
   <footer class="footer">
-    <p>&copy; <span id="tahun">2026</span> <span data-nama>Siti Agniatul Rohmah</span></p>
-    <a href="#beranda" class="to-top">
-      <span data-i18n="keAtas">Kembali ke atas</span>
-      <svg class="ic" aria-hidden="true" focusable="false"><use href="#i-up"/></svg>
-    </a>
+    <div class="wrap footer-inner">
+      <p>&copy; <span id="tahun">2026</span> <span data-nama>Siti Agniatul Rohmah</span></p>
+      <a href="#beranda" class="to-top">
+        <span data-i18n="keAtas">Kembali ke atas</span>
+        <svg class="ic" aria-hidden="true" focusable="false"><use href="#i-up"/></svg>
+      </a>
+    </div>
   </footer>
 
   <!-- Tombol melayang kembali ke atas -->

@@ -16,6 +16,10 @@ window.DATA_PORTOFOLIO = {
   "nama": "Siti Agniatul Rohmah",
   "panggilan": "AGNI",
   "sapaan": ["Hello!", "Halo!", "Hai!", "Hola!", "Annyeong!"],
+  "tagline": {
+    "id": "Lulusan D3 Sistem Informasi · Staff IT · suka desain dan hal-hal kreatif.",
+    "en": "Information Systems graduate · IT Staff · loves design and creative things."
+  },
   "bio": {
     "id": "Saya lulusan D3 Sistem Informasi dari Politeknik Negeri Subang. Saat ini saya magang sebagai Staff IT di Dahana, dan sebelumnya menjalani PKL sebagai Staff IT di Telkom Subang Centrum. Saya juga berpengalaman berorganisasi di HIMATIKOM hingga menjadi Kepala Biro Kominfo.",
     "en": "I am an Information Systems graduate (Associate Degree, D3) from Politeknik Negeri Subang. I am currently an IT Staff intern at Dahana, and previously completed my field internship as IT Staff at Telkom Subang Centrum. I also have organizational experience in HIMATIKOM, where I became Head of the Communication & Information Bureau."

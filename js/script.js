@@ -28,7 +28,8 @@ const TEKS = {
   id: {
     skip: 'Lewati ke konten utama',
     navUtama: 'Navigasi utama',
-    navBeranda: 'Beranda', navSkills: 'Keahlian', navPengalaman: 'Pengalaman', navDataDiri: 'Data Diri', navKontak: 'Kontak', navKarya: 'Karya',
+    navBeranda: 'Beranda', navSkills: 'Keahlian', navPengalaman: 'Pengalaman', navDataDiri: 'Data Diri', navKontak: 'Kontak', navKarya: 'Karya', navTentang: 'Tentang',
+    sampul1: 'Portofolio', sampul2: 'Kreatif', aku: 'Aku', gulir: 'Gulir ke bawah',
     keBeranda: 'Kembali ke beranda',
     temaKeGelap: 'Ganti ke tema gelap', temaKeTerang: 'Ganti ke tema terang',
     bukaMenu: 'Buka menu', tutupMenu: 'Tutup menu',
@@ -57,7 +58,8 @@ const TEKS = {
   en: {
     skip: 'Skip to main content',
     navUtama: 'Main navigation',
-    navBeranda: 'Home', navSkills: 'Skills', navPengalaman: 'Experience', navDataDiri: 'Profile', navKontak: 'Contact', navKarya: 'Works',
+    navBeranda: 'Home', navSkills: 'Skills', navPengalaman: 'Experience', navDataDiri: 'Profile', navKontak: 'Contact', navKarya: 'Works', navTentang: 'About',
+    sampul1: 'Creative', sampul2: 'Portfolio', aku: "I'm", gulir: 'Scroll down',
     keBeranda: 'Back to home',
     temaKeGelap: 'Switch to dark theme', temaKeTerang: 'Switch to light theme',
     bukaMenu: 'Open menu', tutupMenu: 'Close menu',
@@ -211,6 +213,43 @@ function initTema() {
   terapkan();
 }
 
+/* ---------- Efek huruf potongan kertas ---------- */
+/**
+ * Memecah teks elemen bertanda data-potong menjadi huruf-huruf <span class="ch">
+ * yang masing-masing sedikit miring & naik-turun, seperti huruf guntingan kertas.
+ * Kemiringan dibuat tetap (berdasarkan huruf & posisinya), jadi tidak berubah-ubah.
+ */
+function potongHuruf(el) {
+  const teks = el.dataset.teksAsli !== undefined && el.querySelector('.ch') ? el.dataset.teksAsli : el.textContent;
+  el.dataset.teksAsli = teks;
+  el.setAttribute('aria-label', teks);
+  const potongan = Array.from(teks).map((huruf, i) => {
+    if (huruf === ' ') {
+      const s = document.createElement('span');
+      s.className = 'spasi';
+      s.setAttribute('aria-hidden', 'true');
+      return s;
+    }
+    const kode = huruf.charCodeAt(0) + i * 7;
+    const s = document.createElement('span');
+    s.className = 'ch';
+    s.setAttribute('aria-hidden', 'true');
+    s.textContent = huruf;
+    s.style.setProperty('--r', `${((kode * 37) % 11) - 5}deg`);
+    s.style.setProperty('--y', `${((kode * 13) % 7) - 3}px`);
+    return s;
+  });
+  el.replaceChildren(...potongan);
+}
+
+function potongSemua() {
+  document.querySelectorAll('[data-potong]').forEach((el) => {
+    // Teks baru dari data-i18n / renderData: lupakan teks lama
+    if (!el.querySelector('.ch')) delete el.dataset.teksAsli;
+    potongHuruf(el);
+  });
+}
+
 /* ---------- Bahasa Indonesia / Inggris ---------- */
 /** Mengisi semua elemen bertanda data-i18n (teks) dan data-i18n-* (atribut). */
 function terapkanTeksAntarmuka() {
@@ -237,6 +276,7 @@ function initBahasa() {
     penyimpanan.tulis(KUNCI_BAHASA, bahasa);
     terapkanTeksAntarmuka();
     renderData();
+    potongSemua();
     document.dispatchEvent(new CustomEvent('gantibahasa'));
   });
 }
@@ -325,6 +365,7 @@ function initStiker() {
     indeks = (indeks + 1) % SAPAAN.length;
     judul.textContent = SAPAAN[indeks];
     judul.dataset.diganti = "1";
+    potongHuruf(judul);
     judul.classList.remove('ganti');
     tombol.classList.remove('putar');
     void judul.offsetWidth;                 // mulai ulang animasi
@@ -487,27 +528,6 @@ function isiTeks(id, teks) {
   if (el && teks) el.textContent = teks;
 }
 
-/** Membuat satu entri pendidikan/pengalaman yang bisa dibuka-tutup. */
-function buatEntri(judul, subjudul, detail) {
-  const entri = buat('details', 'entry');
-  const ringkas = document.createElement('summary');
-  const teks = buat('span');
-  teks.append(buat('span', 'entry-year', judul));
-  if (subjudul) teks.append(buat('span', 'entry-text', subjudul));
-  ringkas.append(teks, ikon('down', 'ic entry-chev'));
-  entri.append(ringkas);
-
-  const butir = (detail || []).filter((d) => String(d).trim());
-  if (butir.length) {
-    const daftar = buat('ul', 'entry-detail');
-    butir.forEach((d) => daftar.append(buat('li', '', d)));
-    entri.append(daftar);
-  } else {
-    entri.classList.add('tanpa-detail');
-  }
-  return entri;
-}
-
 function renderData() {
   const d = DATA;
   if (!d || !d.nama) return;                     // tanpa data.js: biarkan HTML apa adanya
@@ -525,6 +545,7 @@ function renderData() {
   if (meta) meta.setAttribute('content', t('deskripsi')(d.nama));
   isiTeks('isiBio', pilih(d.bio));
   isiTeks('isiPenutup', pilih(d.penutup));
+  isiTeks('isiTagline', pilih(d.tagline));
   const elHello = document.getElementById('judulHello');
   if (elHello && SAPAAN[0] && !elHello.dataset.diganti) elHello.textContent = SAPAAN[0];
 
@@ -556,19 +577,60 @@ function renderData() {
     if (skillAktif >= 0) pilihSkill(Math.min(skillAktif, wadahSkill.children.length - 1));
   }
 
-  // Pendidikan & pengalaman
-  const detailDari = (daftar) => (daftar || []).map(pilih);
+  // Pendidikan: kartu berjajar (kampus, waktu, jurusan, detail)
+  const detailDari = (daftar) => (daftar || []).map(pilih).filter((x) => String(x).trim());
   const wadahPend = document.getElementById('isiPendidikan');
   if (wadahPend && Array.isArray(d.pendidikan)) {
-    wadahPend.replaceChildren(...d.pendidikan.map((p) =>
-      // Judul: "Kampus · Waktu", mis. "Politeknik Negeri Subang · September 2026"
-      buatEntri([pilih(p.tempat), pilih(p.waktu)].filter(Boolean).join(' · '), pilih(p.jurusan), detailDari(p.detail))));
+    wadahPend.replaceChildren(...d.pendidikan.map((p) => {
+      const kartu = buat('article', 'edu-card');
+      kartu.append(buat('h3', '', pilih(p.tempat)));
+      if (pilih(p.waktu)) kartu.append(buat('span', 'edu-waktu', pilih(p.waktu)));
+      if (pilih(p.jurusan)) kartu.append(buat('p', 'edu-jurusan', pilih(p.jurusan)));
+      detailDari(p.detail).forEach((x) => kartu.append(buat('p', 'edu-detail', x)));
+      return kartu;
+    }));
     document.getElementById('pendidikan').hidden = d.pendidikan.length === 0;
   }
+
+  // Pengalaman: kartu krem bergaya kertas tempel
   const wadahPeng = document.getElementById('isiPengalaman');
   if (wadahPeng && Array.isArray(d.pengalaman)) {
-    wadahPeng.replaceChildren(...d.pengalaman.map((p) => buatEntri(pilih(p.waktu), pilih(p.peran), detailDari(p.detail))));
+    wadahPeng.replaceChildren(...d.pengalaman.map((p, i) => {
+      const kartu = buat('article', 'exp-card reveal visible');
+      kartu.style.setProperty('--d', String(i % 4));
+      if (pilih(p.waktu)) kartu.append(buat('span', 'exp-waktu', pilih(p.waktu)));
+      kartu.append(buat('h3', 'exp-peran', pilih(p.peran)));
+      const butir = detailDari(p.detail);
+      if (butir.length) {
+        const ul = buat('ul', 'exp-detail');
+        butir.forEach((x) => ul.append(buat('li', '', x)));
+        kartu.append(ul);
+      }
+      return kartu;
+    }));
     document.getElementById('pengalaman').hidden = d.pengalaman.length === 0;
+  }
+
+  // Pita bergerak: nama-nama keahlian, diulang 2x agar bisa berputar tanpa putus
+  const pita = document.getElementById('marquee');
+  if (pita && Array.isArray(d.skills)) {
+    const nama = d.skills.map((s) => pilih(s.nama) || s.label).filter(Boolean);
+    const isi = [];
+    for (let ulang = 0; ulang < 2; ulang++) {
+      nama.forEach((n) => {
+        const item = buat('span', 'marquee-item', n);
+        const ns = 'http://www.w3.org/2000/svg';
+        const svg = document.createElementNS(ns, 'svg');
+        svg.setAttribute('aria-hidden', 'true');
+        const use = document.createElementNS(ns, 'use');
+        use.setAttribute('href', '#d-burst');
+        svg.appendChild(use);
+        item.append(svg);
+        isi.push(item);
+      });
+    }
+    pita.replaceChildren(...isi);
+    pita.parentElement.hidden = nama.length === 0;
   }
 
   // Kontak cepat
@@ -813,6 +875,7 @@ function initKarya() {
 document.addEventListener('DOMContentLoaded', () => {
   terapkanTeksAntarmuka();
   renderData();
+  potongSemua();
   initBahasa();
   initTema();
   initNavigasi();
