@@ -24,7 +24,7 @@ window.DATA_PORTOFOLIO = {
     "id": "Semoga kamu suka portofolio saya!",
     "en": "Hope you enjoy my portfolio!"
   },
-  "foto": "asset/foto.jpg",
+  "foto": "asset/foto/profil.jpg",
   "skills": [
     { "label": "HTML", "nama": "HTML", "level": 90, "keterangan": { "id": "Menyusun struktur halaman yang rapi, semantik, dan mudah diakses.", "en": "Building clean, semantic, and accessible page structures." } },
     { "label": "CSS", "nama": "CSS", "level": 85, "keterangan": { "id": "Membuat tampilan responsif dengan Flexbox, Grid, dan animasi.", "en": "Creating responsive layouts with Flexbox, Grid, and animations." } },

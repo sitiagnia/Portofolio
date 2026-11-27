@@ -3,7 +3,7 @@
    Fitur:
    - Inisial otomatis dari nama (tampil saat belum ada foto)
    - Animasi muncul saat scroll
-   - Foto profil dari file asset/foto.jpg (hanya pemilik yang bisa
+   - Foto profil dari file asset/foto/profil.jpg (hanya pemilik yang bisa
      mengganti lewat VS Code; tidak ada form unggah di halaman)
    - Navbar: menu hamburger (HP/tablet), penanda menu aktif,
      bilah progres scroll, tombol kembali ke atas
@@ -167,7 +167,7 @@ function initReveal() {
 /* ---------- Foto profil (hanya dari file, tidak bisa diubah pengunjung) ---------- */
 /**
  * Foto diambil dari file yang ditunjuk atribut data-default di index.html
- * (bawaan: asset/foto.jpg). Untuk mengganti foto, ganti file itu lewat VS Code.
+ * (bawaan: asset/foto/profil.jpg). Untuk mengganti foto, ganti file itu lewat VS Code.
  * Jika file belum ada, yang tampil adalah inisial nama.
  */
 function initFoto() {
