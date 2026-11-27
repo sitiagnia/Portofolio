@@ -296,6 +296,66 @@ section[id],
 }
 .hello-title.ganti { animation: gantiSapaan 0.45s ease; }
 
+/* Layar pembuka: hanya sapaan "Hello! Welcome to my portfolio" */
+.welcome {
+  position: relative;
+  isolation: isolate;
+  min-height: 100vh;
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  padding: calc(var(--nav-h) + 24px) 0 110px;
+  overflow: clip;
+}
+.welcome::before {
+  content: '';
+  position: absolute;
+  /* selebar layar penuh, walau section berada di dalam kolom halaman */
+  inset: 0 calc(50% - 50vw);
+  z-index: -1;
+  background: radial-gradient(ellipse 45% 42% at 50% 44%, rgba(224, 87, 79, 0.18), transparent 100%);
+  pointer-events: none;
+}
+.welcome-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: clamp(6px, 1.4vw, 16px);
+}
+.welcome-sticker .sticker { width: clamp(110px, 13vw, 170px); }
+.welcome-title {
+  font-size: clamp(5rem, 17vw, 14rem);
+  line-height: 0.9;
+}
+.welcome-sub {
+  font-size: clamp(1.2rem, 2.6vw, 2.1rem);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--ink-soft);
+}
+
+.scroll-hint {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(20px, 4vw, 36px);
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  margin-left: -24px;
+  border-radius: 50%;
+  border: 2px solid var(--ink);
+  color: var(--ink);
+  animation: lompat 2s ease-in-out infinite;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+.scroll-hint:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
+@keyframes lompat {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(8px); }
+}
+
 /* Nama panggilan (menonjol) + nama lengkap */
 .name-block { margin-bottom: clamp(18px, 2.2vw, 30px); }
 .nickname {
@@ -725,6 +785,7 @@ section[id],
 /* HP sangat kecil */
 @media (max-width: 380px) {
   .hello-title { font-size: 3.1rem; }
+  .welcome-title { font-size: 4.6rem; }
   .sticker { width: 68px; }
 }
 

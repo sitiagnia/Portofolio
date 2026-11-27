@@ -90,8 +90,38 @@
 
   <main class="page" id="konten">
 
-    <!-- ===================== LEMBAR PROFIL (HELLO) ===================== -->
-    <section class="about" id="beranda" aria-labelledby="judulHello">
+    <!-- ===================== LAYAR PEMBUKA (SAPAAN) ===================== -->
+    <section class="welcome" id="beranda" aria-labelledby="judulHello">
+      <div class="welcome-inner">
+        <!-- Stiker: klik untuk mengganti sapaan -->
+        <button type="button" class="sticker-btn welcome-sticker reveal" id="sticker" aria-label="Ganti sapaan" title="Klik aku!" data-i18n-aria-label="sapaanLabel" data-i18n-title="sapaanTitle">
+          <svg class="sticker" viewBox="0 0 120 120" aria-hidden="true" focusable="false">
+            <g fill="#e0574f">
+              <circle cx="96" cy="60" r="20"/><circle cx="85.5" cy="85.5" r="20"/>
+              <circle cx="60" cy="96" r="20"/><circle cx="34.5" cy="85.5" r="20"/>
+              <circle cx="24" cy="60" r="20"/><circle cx="34.5" cy="34.5" r="20"/>
+              <circle cx="60" cy="24" r="20"/><circle cx="85.5" cy="34.5" r="20"/>
+            </g>
+            <circle cx="60" cy="60" r="38" fill="#f47a6d"/>
+            <circle cx="47" cy="55" r="8" fill="#fff"/><circle cx="73" cy="55" r="8" fill="#fff"/>
+            <circle class="pupil" cx="48.5" cy="56.5" r="4" fill="#2d3038"/><circle class="pupil" cx="74.5" cy="56.5" r="4" fill="#2d3038"/>
+            <circle cx="40" cy="70" r="5.5" fill="#ffb8ad"/><circle cx="80" cy="70" r="5.5" fill="#ffb8ad"/>
+            <path d="M52 71q8 8 16 0" fill="none" stroke="#2d3038" stroke-width="3.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+
+        <h1 class="hello-title welcome-title reveal" id="judulHello" style="--d: 1">Hello!</h1>
+        <!-- GANTI: teks ucapan selamat datang -->
+        <p class="welcome-sub reveal" style="--d: 2">Welcome to my portfolio</p>
+      </div>
+
+      <a href="#tentang" class="scroll-hint" aria-label="Gulir ke bawah" data-i18n-aria-label="gulir">
+        <svg class="ic" aria-hidden="true" focusable="false"><use href="#i-down"/></svg>
+      </a>
+    </section>
+
+    <!-- ===================== LEMBAR PROFIL ===================== -->
+    <section class="about" id="tentang" aria-labelledby="namaPanggilan">
       <div class="about-grid">
 
         <!-- Foto profil: taruh file di asset/foto/profil.jpg (lokasinya diatur di js/data.js, bagian "foto"). Jika belum ada, tampil inisial nama -->
@@ -101,31 +131,11 @@
           </div>
         </figure>
 
-        <!-- Sapaan & perkenalan -->
+        <!-- Nama & perkenalan -->
         <div class="hello reveal" style="--d: 1">
-          <div class="hello-head">
-            <h1 class="hello-title" id="judulHello">Hello!</h1>
-            <!-- Stiker: klik untuk mengganti sapaan -->
-            <button type="button" class="sticker-btn" id="sticker" aria-label="Ganti sapaan" title="Klik aku!" data-i18n-aria-label="sapaanLabel" data-i18n-title="sapaanTitle">
-              <svg class="sticker" viewBox="0 0 120 120" aria-hidden="true" focusable="false">
-                <g fill="#e0574f">
-                  <circle cx="96" cy="60" r="20"/><circle cx="85.5" cy="85.5" r="20"/>
-                  <circle cx="60" cy="96" r="20"/><circle cx="34.5" cy="85.5" r="20"/>
-                  <circle cx="24" cy="60" r="20"/><circle cx="34.5" cy="34.5" r="20"/>
-                  <circle cx="60" cy="24" r="20"/><circle cx="85.5" cy="34.5" r="20"/>
-                </g>
-                <circle cx="60" cy="60" r="38" fill="#f47a6d"/>
-                <circle cx="47" cy="55" r="8" fill="#fff"/><circle cx="73" cy="55" r="8" fill="#fff"/>
-                <circle class="pupil" cx="48.5" cy="56.5" r="4" fill="#2d3038"/><circle class="pupil" cx="74.5" cy="56.5" r="4" fill="#2d3038"/>
-                <circle cx="40" cy="70" r="5.5" fill="#ffb8ad"/><circle cx="80" cy="70" r="5.5" fill="#ffb8ad"/>
-                <path d="M52 71q8 8 16 0" fill="none" stroke="#2d3038" stroke-width="3.5" stroke-linecap="round"/>
-              </svg>
-            </button>
-          </div>
-
           <!-- Nama panggilan (besar) + nama lengkap, lalu perkenalan. Isinya diambil dari js/data.js -->
           <div class="name-block">
-            <p class="nickname" id="namaPanggilan">AGNI</p>
+            <h2 class="nickname" id="namaPanggilan">AGNI</h2>
             <p class="fullname" id="namaUtama">Siti Agniatul Rohmah</p>
           </div>
           <p class="hello-bio" id="isiBio"></p>
